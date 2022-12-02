@@ -9,9 +9,8 @@ export default function YouTubePlayerExample() {
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [
-        "mqmxkGjow1A",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
+        "4D7u5KF7SP8",
+        "wXhTHyIgQ_U",
     ];
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
@@ -19,7 +18,7 @@ export default function YouTubePlayerExample() {
 
     const playerOptions = {
         height: '390',
-        width: '640',
+        width: '705',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 0,

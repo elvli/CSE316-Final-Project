@@ -12,6 +12,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
+import YouTube from './YouTubePlaylisterReact';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -96,7 +97,8 @@ const HomeScreen = () => {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        Player tab
+                        <YouTube
+                            videoId="4D7u5KF7SP8"/>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         Comments tab

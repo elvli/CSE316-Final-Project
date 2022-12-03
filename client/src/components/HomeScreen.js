@@ -12,7 +12,17 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
-import YouTube from './YouTubePlaylisterReact';
+import YouTubePlayerExample from './YouTubePlaylisterReact';
+import { Card } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import IconButton from '@mui/material/IconButton';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import Stop from '@mui/icons-material/Stop';
+import { useTheme } from '@mui/material/styles';
+
+import incSong from './YouTubePlaylisterReact';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -21,6 +31,7 @@ import YouTube from './YouTubePlaylisterReact';
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const [value, setValue] = React.useState(0)
+    const theme = useTheme();
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
@@ -60,11 +71,12 @@ const HomeScreen = () => {
     function handleCreateNewList() {
         store.createNewList();
     }
+
     let listCard = "";
     if (store) {
         listCard = 
             <Grid container>
-                <Grid item xs={6}>
+                <Grid item xs={7}>
                     <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
                     {
                         store.idNamePairs.map((pair) => (
@@ -87,7 +99,7 @@ const HomeScreen = () => {
                     </List>
                 </Grid>
 
-                <Grid item xs = {6}>
+                <Grid item xs = {5}>
                     <Box sx={{borderBottom: 1, borderColor: "divider"}}>
                         <Tabs value={value} onChange={handleChangeTab} centered>
                             <Tab label="Player">
@@ -97,8 +109,7 @@ const HomeScreen = () => {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        <YouTube
-                            videoId="4D7u5KF7SP8"/>
+                        <YouTubePlayerExample/>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         Comments tab

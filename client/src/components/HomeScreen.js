@@ -3,7 +3,7 @@ import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
-import AddIcon from '@mui/icons-material/Add';
+import PlaylistAdd from '@mui/icons-material/PlaylistAdd';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
@@ -22,6 +22,7 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import playlisterLogo from './images/playlisterLogo.png';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -60,6 +61,8 @@ const HomeScreen = () => {
         value: PropTypes.number.isRequired,
     };
       
+    let isGuest = false;
+    if (auth.user && auth.user.email == "guest@gmail.com") isGuest = true;
 
     const handleChangeTab = (event, val) => {
         setValue(val)
@@ -95,7 +98,7 @@ const HomeScreen = () => {
         listCard = 
             <Grid container sx={{p: 0}}>
                 <Grid item xs={11} bgcolor='#f397ff'>
-                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home">
+                    <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home">
                         <Home sx={{fontSize:'32pt'}}/>
                     </IconButton>
                     <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="Groups">
@@ -129,7 +132,7 @@ const HomeScreen = () => {
                 </Grid>
 
                 {/* PLAYLIST CARDS */}
-                <Grid item xs={7} sx={{maxHeight: '650px'}}>
+                <Grid item xs={7} sx={{height: '650px', maxHeight: '650px'}}>
                     <List sx={{width: '100%', backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)', mb:"20px", overflow: 'auto', maxHeight: 687, pt: 0}} >
                     {
                         store.idNamePairs.map((pair) => (
@@ -139,16 +142,7 @@ const HomeScreen = () => {
                                 selected={false}
                             />
                         ))
-                        
                     }
-                    <Fab sx={{transform:"translate(100%, 10%)"}}
-                        color="secondary" 
-                        aria-label="add"
-                        id="add-list-button"
-                        onClick={handleCreateNewList}
-                    >
-                        <AddIcon />
-                    </Fab>
                     </List>
                 </Grid>
 
@@ -172,9 +166,13 @@ const HomeScreen = () => {
                 
                 {/* STATUSBAR */}
                 <Grid item xs={12}>
-                    <Box sx={{transform:"translate(0%,10%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
-                    width: '1207px', height: '50px', backgroundImage: 'linear-gradient(to bottom, #ffffff, #f397ff)', alignItem: 'center'}}>
-                        <Typography sx={{fontSize: '30px'}}>
+                    <Box sx={{transform: "translate(0%,5%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
+                    width: '1536px', height: '50px', backgroundImage: 'linear-gradient(to bottom, #ffffff, #f397ff)', alignItem: 'center'}}>
+                        <IconButton onClick={handleCreateNewList} sx={{transform:"translate(0%, -15%)", textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="AddList">
+                            <PlaylistAdd  sx={{fontSize:'32pt'}}/>
+                        </IconButton>
+
+                        <Typography sx={{fontSize: '30px', pl: '20px'}}>
                             {text}
                         </Typography>
                     </Box>
@@ -184,15 +182,7 @@ const HomeScreen = () => {
     return (
         <div id="playlist-selector">
             <div id="list-selector-heading">
-            <Fab sx={{transform:"translate(-20%, 0%)"}}
-                color="secondary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-            >
-                <AddIcon />
-            </Fab>
-                Your Playlists
+               <img src={playlisterLogo} alt="playlisterLogo" width='265px'/>
             </div>
             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
                 {listCard}

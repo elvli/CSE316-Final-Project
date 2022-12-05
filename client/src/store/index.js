@@ -258,6 +258,7 @@ function GlobalStoreContextProvider(props) {
                                         playlist: playlist
                                     }
                                 });
+                                store.setCurrentList(id);
                             }
                         }
                         getListPairs(playlist);
@@ -286,16 +287,16 @@ function GlobalStoreContextProvider(props) {
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
-            let newList = response.data.playlist;
+            // let newList = response.data.playlist;
             storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
                 payload: null
-            });
+            }
+            );
 
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
             //history.push("/playlist/" + newList._id);
             store.loadIdNamePairs();
-
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");

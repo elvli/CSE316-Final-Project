@@ -126,7 +126,7 @@ export default function YouTubePlayerExample() {
     };
     
     let infoCard = 
-        <Card elevation={3}>
+        <Card>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography component="div" variant="h4">

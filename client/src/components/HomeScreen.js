@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import AuthContext from '../auth'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
-
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
@@ -13,16 +13,15 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import YouTubePlayerExample from './YouTubePlaylisterReact';
-import { Card } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
+import CommentsTab from './CommentsTab'
+import Home from '@mui/icons-material/Home';
+import Groups from '@mui/icons-material/Groups';
+import Person from '@mui/icons-material/Person';
+import Sort from '@mui/icons-material/Sort';
 import IconButton from '@mui/material/IconButton';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import Stop from '@mui/icons-material/Stop';
-import { useTheme } from '@mui/material/styles';
-
-import incSong from './YouTubePlaylisterReact';
+import TextField from '@mui/material/TextField';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -30,40 +29,59 @@ import incSong from './YouTubePlaylisterReact';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [value, setValue] = React.useState(0)
-    const theme = useTheme();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
       
         return (
-          <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-          >
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                {...other}
+            >
             {value === index && (
-              <Box sx={{ p: 3 }}>
-                <Typography>{children}</Typography>
-              </Box>
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
             )}
-          </div>
+            </div>
         );
-      }
+    }
       
-      TabPanel.propTypes = {
+    TabPanel.propTypes = {
         children: PropTypes.node,
         index: PropTypes.number.isRequired,
         value: PropTypes.number.isRequired,
-      };
+    };
       
 
     const handleChangeTab = (event, val) => {
         setValue(val)
     }
 
+    const handleHouseClick = () => {
+        store.closeCurrentList();
+    }
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    // FOR THE STATUS BAR
+    let text ="";
+    if (auth.loggedIn && store.currentList){
+        text = store.currentList.name;
+    }
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -75,9 +93,44 @@ const HomeScreen = () => {
     let listCard = "";
     if (store) {
         listCard = 
-            <Grid container>
-                <Grid item xs={7}>
-                    <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
+            <Grid container sx={{p: 0}}>
+                <Grid item xs={11} bgcolor='#f397ff'>
+                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home">
+                        <Home sx={{fontSize:'32pt'}}/>
+                    </IconButton>
+                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="Groups">
+                        <Groups sx={{fontSize:'32pt'}}/>
+                    </IconButton>
+                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="{Person}">
+                        <Person sx={{fontSize:'32pt'}}/>
+                    </IconButton>
+                    <TextField id='Search-bar' variant='outlined' label='Search' sx={{width: '40%'}} color='secondary'/>
+                </Grid>
+
+                <Grid item xs={1} bgcolor='#f397ff'>
+                    <IconButton onClick={handleMenuOpen} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="Sort">
+                        <Sort sx={{fontSize:'32pt'}}/>
+                    </IconButton>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={isMenuOpen}
+                        onClose={handleMenuClose}
+                        MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <MenuItem onClick={handleMenuClose}>Name (A-Z)</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Publish Date (Newest)</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Listens (High - Low)</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Likes (High - Low)</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Dislikes (High - Low)</MenuItem>
+                    </Menu>
+                </Grid>
+
+                {/* PLAYLIST CARDS */}
+                <Grid item xs={7} sx={{maxHeight: '650px'}}>
+                    <List sx={{width: '100%', backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)', mb:"20px", overflow: 'auto', maxHeight: 687, pt: 0}} >
                     {
                         store.idNamePairs.map((pair) => (
                             <ListCard
@@ -99,9 +152,10 @@ const HomeScreen = () => {
                     </List>
                 </Grid>
 
-                <Grid item xs = {5}>
+                {/* VIDEOPLAYER AND COMMENTS */}
+                <Grid item xs={5}>
                     <Box sx={{borderBottom: 1, borderColor: "divider"}}>
-                        <Tabs value={value} onChange={handleChangeTab} centered>
+                        <Tabs value={value} onChange={handleChangeTab} indicatorColor="secondary" textColor="secondary" centered>
                             <Tab label="Player">
                             </Tab>
                             <Tab label="Comments">
@@ -112,8 +166,18 @@ const HomeScreen = () => {
                         <YouTubePlayerExample/>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        Comments tab
+                        <CommentsTab/>
                     </TabPanel>
+                </Grid>
+                
+                {/* STATUSBAR */}
+                <Grid item xs={12}>
+                    <Box sx={{transform:"translate(0%,10%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
+                    width: '1207px', height: '50px', backgroundImage: 'linear-gradient(to bottom, #ffffff, #f397ff)', alignItem: 'center'}}>
+                        <Typography sx={{fontSize: '30px'}}>
+                            {text}
+                        </Typography>
+                    </Box>
                 </Grid>
             </Grid>
     }
@@ -131,9 +195,7 @@ const HomeScreen = () => {
                 Your Playlists
             </div>
             <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
-                {
-                    listCard
-                }
+                {listCard}
                 <MUIDeleteModal />
             </Box>
         </div>)

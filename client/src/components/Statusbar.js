@@ -8,8 +8,6 @@ import { GlobalStoreContext } from '../store'
     @author McKilla Gorilla
 */
 
-
-
 function Statusbar() {
 
     function clickHandler() {
@@ -23,15 +21,13 @@ function Statusbar() {
     if (auth.loggedIn && store.currentList){
         text = store.currentList.name;
     return (
-        <div id="playlister-statusbar">
-            {text}
-        </div>
+        // <div id="playlister-statusbar">
+        //     {text}
+        // </div>
+        <></>
     );
     }
     return null;
 }
-/*<input type="button" 
-onClick={clickHandler} 
-value='clickyclicky' />*/
 
 export default Statusbar;

@@ -4,7 +4,6 @@ import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
 
 import EditToolbar from './EditToolbar'
-
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -31,10 +30,6 @@ export default function AppBanner() {
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
-    }
-
-    const handleHouseClick = () => {
-        store.closeCurrentList();
     }
 
     const menuId = 'primary-search-account-menu';
@@ -105,7 +100,9 @@ export default function AppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                        {/* <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'white', height: 38, width: 38 }} aria-label="home">
+                            <Home/>
+                        </IconButton> */}
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ height: "90px", display: { xs: 'none', md: 'flex' } }}>
@@ -116,16 +113,14 @@ export default function AppBanner() {
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
-                            color="inherit"
+                            bgcolor="#000000"
                         >
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>
                     </Box>
                 </Toolbar>
             </AppBar>
-            {
-                menu
-            }
+            {menu}
         </Box>
     );
 }

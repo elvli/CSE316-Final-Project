@@ -162,7 +162,7 @@ body {
   font-size: 18pt;
   margin: 10px;
   padding: 20px;
-  border-radius: 25px;
+  border-radius: 4px;
 }
 
 .list-card:aria-disabled,

@@ -46,7 +46,7 @@ export default function MUIEditSongModal() {
               }}
             sx={{color: 'beige', boxShadow: 24,}}
         >
-            <Box sx={{backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)'}}></Box>
+            <Box sx={{backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)'}}>
                 <DialogTitle><b>Edit Song</b></DialogTitle>
                 <DialogContent
                     className="dialog-center"
@@ -60,6 +60,7 @@ export default function MUIEditSongModal() {
                         margin="dense"
                         defaultValue={title}
                         onChange={handleUpdateTitle}
+                        color="secondary"
                     />
                     <TextField
                         id="edit-song-dialog-title-textfield" 
@@ -70,7 +71,8 @@ export default function MUIEditSongModal() {
                         variant='standard'
                         margin='dense'
                         defaultValue={artist} 
-                        onChange={handleUpdateArtist} 
+                        onChange={handleUpdateArtist}
+                        color="secondary"
                     />
                     <TextField
                         id="edit-song-dialog-title-textfield" 
@@ -82,17 +84,18 @@ export default function MUIEditSongModal() {
                         margin='dense'
                         defaultValue={youTubeId} 
                         onChange={handleUpdateYouTubeId} 
+                        color="secondary"
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleConfirmEditSong}>
+                    <Button onClick={handleConfirmEditSong} color="secondary">
                         Confirm
                     </Button>
-                    <Button onClick={handleCancelEditSong}>
+                    <Button onClick={handleCancelEditSong} color="secondary">
                         Cancel
                     </Button>
                 </DialogActions>
-            <Box sx={{backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)'}}></Box>
+            </Box>
         </Dialog>
     );
 }

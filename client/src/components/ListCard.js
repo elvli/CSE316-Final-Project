@@ -8,6 +8,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Add from '@mui/icons-material/Add';
 import Undo from '@mui/icons-material/Undo';
 import Redo from '@mui/icons-material/Redo';
+import Publish from '@mui/icons-material/Publish';
+import ContentCopy from '@mui/icons-material/ContentCopy';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
@@ -153,7 +155,7 @@ function ListCard(props) {
             onChange={handleChange()} 
             elevation={3}
             disableGutters={true}
-            sx={{borderRadius:"25px", margin: "20px", mt: '10px'}}>
+            sx={{borderRadius:"4px", margin: "20px", mt: '10px'}}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Box
                     id={idNamePair._id}
@@ -203,10 +205,10 @@ function ListCard(props) {
 
                     <Grid item xs={2}>
                         <IconButton onClick={handleToggleEdit} color= 'secondary' aria-label='edit'>
-                            <EditIcon style={{fontSize:'32pt'}} />
+                            <Publish style={{fontSize:'32pt'}} />
                         </IconButton>
                         <IconButton onClick={handleToggleEdit} color= 'secondary' aria-label='edit'>
-                            <EditIcon style={{fontSize:'32pt'}} />
+                            <ContentCopy style={{fontSize:'32pt'}} />
                         </IconButton>
                     </Grid>
                 </Grid>

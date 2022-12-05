@@ -46,10 +46,10 @@ export default function MUIRemoveSongModal() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleConfirmRemoveSong}>
+                    <Button onClick={handleConfirmRemoveSong} color="secondary">
                         Confirm
                     </Button>
-                    <Button onClick={handleCancelRemoveSong}>
+                    <Button onClick={handleCancelRemoveSong} color="secondary">
                         Cancel
                     </Button>
                 </DialogActions>

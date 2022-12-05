@@ -97,7 +97,7 @@ const HomeScreen = () => {
     if (store) {
         listCard = 
             <Grid container sx={{p: 0}}>
-                <Grid item xs={11} bgcolor='#f397ff'>
+                <Grid item xs={10} bgcolor='#f397ff'>
                     <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home">
                         <Home sx={{fontSize:'32pt'}}/>
                     </IconButton>
@@ -110,10 +110,13 @@ const HomeScreen = () => {
                     <TextField id='Search-bar' variant='outlined' label='Search' sx={{width: '40%'}} color='secondary'/>
                 </Grid>
 
-                <Grid item xs={1} bgcolor='#f397ff'>
-                    <IconButton onClick={handleMenuOpen} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="Sort">
+                <Grid item xs={2} bgcolor='#f397ff' sx={{fontSize: 25}}>
+                    <Typography sx={{fontSize: 25, fontWeight: 'bold', transform:"translate(30%,0%)"}}>
+                        Sort By
+                    <IconButton onClick={handleMenuOpen} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60, transform:"translate(20%,-5%)"}} aria-label="Sort">
                         <Sort sx={{fontSize:'32pt'}}/>
                     </IconButton>
+                    </Typography>
                     <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
@@ -142,6 +145,7 @@ const HomeScreen = () => {
                                 selected={false}
                             />
                         ))
+                        
                     }
                     </List>
                 </Grid>
@@ -166,7 +170,7 @@ const HomeScreen = () => {
                 
                 {/* STATUSBAR */}
                 <Grid item xs={12}>
-                    <Box sx={{transform: "translate(0%,5%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
+                    <Box sx={{transform:"translate(0%,5%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
                     width: '1536px', height: '50px', backgroundImage: 'linear-gradient(to bottom, #ffffff, #f397ff)', alignItem: 'center'}}>
                         <IconButton onClick={handleCreateNewList} sx={{transform:"translate(0%, -15%)", textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="AddList">
                             <PlaylistAdd  sx={{fontSize:'32pt'}}/>

@@ -1,24 +1,14 @@
 import { useContext, useState } from 'react'
 import GlobalStoreContext from '../store';
 import * as React from 'react';
-import Modal from '@mui/material/Modal';
-import Alert from '@mui/material/Alert';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import AuthContext from '../auth'
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    height: 200,
-    width: 400,
-    border: '5px solid yellow',
-    fontSize: "20px",
-    p: 4
-};
-
 
 export default function MUIErrorModal() {
     const { store } = useContext(GlobalStoreContext);
@@ -30,10 +20,39 @@ export default function MUIErrorModal() {
     }
 
     return (
-        <Modal open = {auth.errorMessage !== null}>
-         <Alert sx={style} severity="warning">{auth.errorMessage}
-         <Button sx={{color:"black", mt:"20px", ml:"85px", fontSize: 13, fontWeight: 'bold', border: 2}}variant="outlined" onClick={handleCloseButton}>Close</Button>
-         </Alert>
-        </Modal>
+        <Dialog 
+            open = {auth.errorMessage !== null}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            hideBackdrop={false}
+            PaperProps={{
+                elevation: 0,
+                sx: {border: "solid 1px gray",}
+              }}
+            sx={{color: 'beige', boxShadow: 24,}}
+            >
+            <Box sx={{backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)'}}>
+                <DialogTitle id="alert-dialog-title">
+                    Account Error
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {auth.errorMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        id="dialog-no-button"
+                        className="modal-button"
+                        onClick={handleCloseButton}
+                        color='secondary'
+                    >
+                        Close
+                    </Button>
+                </DialogActions>
+            </Box>
+        </Dialog>
     );
 }

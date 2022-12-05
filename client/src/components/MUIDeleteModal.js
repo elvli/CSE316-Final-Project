@@ -32,10 +32,10 @@ export default function MUIDeleteModal() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDeleteList}>
+                    <Button onClick={handleDeleteList} color="secondary">
                         Confirm
                     </Button>
-                    <Button onClick={handleCloseModal}>
+                    <Button onClick={handleCloseModal} color="secondary">
                         Cancel
                     </Button>
                 </DialogActions>

@@ -64,6 +64,7 @@ export default function RegisterScreen() {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    color='secondary'
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -74,6 +75,7 @@ export default function RegisterScreen() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="lname"
+                                    color='secondary'
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -84,6 +86,7 @@ export default function RegisterScreen() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    color='secondary'
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -95,6 +98,7 @@ export default function RegisterScreen() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    color='secondary'
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -106,6 +110,7 @@ export default function RegisterScreen() {
                                     type="password"
                                     id="passwordVerify"
                                     autoComplete="new-password"
+                                    color='secondary'
                                 />
                             </Grid>
                         </Grid>
@@ -113,13 +118,14 @@ export default function RegisterScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
+                            color='secondary'
                             sx={{ mt: 3, mb: 2 }}
                         >
                             Sign Up
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="/login/" variant="body2">
+                                <Link href="/login/" variant="body2" color='secondary'>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

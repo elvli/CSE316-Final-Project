@@ -37,7 +37,7 @@ export default function LoginScreen() {
     console.log(modalJSX);
 
     return (
-        <Grid container component="main" sx={{ height: '100vh' }}>
+        <Grid container component="main" sx={{ height: '100vh'}}>
             <CssBaseline />
             <Grid
                 item
@@ -79,6 +79,7 @@ export default function LoginScreen() {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            color='secondary'
                         />
                         <TextField
                             margin="normal"
@@ -89,18 +90,20 @@ export default function LoginScreen() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            color='secondary'
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            color='secondary'
                         >
                             Sign In
                         </Button>
                         <Grid container>
                             <Grid item>
-                                <Link href="/register/" variant="body2">
+                                <Link href="/register/" variant="body2" color='secondary'>
                                     Don't have an account? Sign Up
                                 </Link>
                             </Grid>

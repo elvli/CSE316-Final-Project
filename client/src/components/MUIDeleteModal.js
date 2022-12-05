@@ -1,25 +1,7 @@
 import { useContext } from 'react'
 import GlobalStoreContext from '../store';
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-
-const style1 = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 345,
-    height: 250,
-    backgroundSize: "contain",
-    backgroundImage: `linear-gradient(to bottom, #f397ff, #ffffff)`,
-    border: '3px solid #000',
-    padding: '20px',
-    boxShadow: 24,
-};
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Box, Typography } from '@mui/material';
 
 export default function MUIDeleteModal() {
     const { store } = useContext(GlobalStoreContext);
@@ -35,24 +17,29 @@ export default function MUIDeleteModal() {
     }
 
     return (
-        <Modal
-        open={store.listMarkedForDeletion !== null}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        <Dialog
+            open={store.listMarkedForDeletion !== null}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
         >
-        <Box sx={style1}>
-            <Typography sx={{fontWeight: 'bold'}} id="modal-modal-title" variant="h4" component="h2">
-                Delete Playlist
-            </Typography>
-            <Divider sx={{borderBottomWidth: 5, p: '5px', transform: 'translate(-5.5%, 0%)', width:377}}/>
-            <Box sx={{background: "rgb(172,79,198,0.05)"}}>
-            <Typography id="modal-modal-description" variant="h6" sx={{color: "#301974" ,fontWeight: 'bold', mt: 1}}>
-                Are you sure you want to delete the <Typography display="inline" id="modal-modal-description" variant="h6" sx={{color: "#820747CF" ,fontWeight: 'bold', mt: 2, textDecoration: 'underline'}}>{name}</Typography> playlist?
-            </Typography>
+            <Box sx={{backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)'}}>
+                <DialogTitle id="alert-dialog-title">
+                    {"Remove List?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Are you sure you want to delete the <Typography display="inline" id="modal-modal-description" variant="h6" sx={{color: "#820747CF" ,fontWeight: 'bold', mt: 2, textDecoration: 'underline'}}>{name}</Typography> playlist?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteList}>
+                        Confirm
+                    </Button>
+                    <Button onClick={handleCloseModal}>
+                        Cancel
+                    </Button>
+                </DialogActions>
             </Box>
-            <Button sx={{opacity: 0.7, color: "#8932CC", backgroundColor: "#CBC3E3", fontSize: 13, fontWeight: 'bold', border: 2, p:"5px", mt:"60px", mr:"95px"}} variant="outlined" onClick={handleDeleteList}> Confirm </Button>
-            <Button sx={{opacity: 0.50, color: "#8932CC", backgroundColor: "#CBC3E3", fontSize: 13, fontWeight: 'bold', border: 2, p:"5px", mt:"60px", ml:"102px"}} variant="outlined" onClick={handleCloseModal}> Cancel </Button>
-        </Box>
-    </Modal>
+        </Dialog>
     );
 }

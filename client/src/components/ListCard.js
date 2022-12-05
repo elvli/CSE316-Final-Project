@@ -4,13 +4,16 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Add from '@mui/icons-material/Add';
+import Undo from '@mui/icons-material/Undo';
+import Redo from '@mui/icons-material/Redo';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import Accordian from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useHistory } from 'react-router-dom'
 import SongCard from './SongCard.js'
 import MUIEditSongModal from './MUIEditSongModal'
@@ -76,10 +79,11 @@ function ListCard(props) {
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
-            store.changeListName(id, text);
+            store.changeListName(id, event.target.value);
             toggleEdit();
         }
     }
+
     function handleUpdateText(event) {
         setText(event.target.value);
     }
@@ -87,8 +91,11 @@ function ListCard(props) {
     //  CONTROLLED ACCORDIAN HANDLER
     let open = false
     if (store.currentList){
+        console.log("soter:" + store.currentList._id)
+        console.log("soter:" + idNamePair._id)
         if (store.currentList._id == idNamePair._id) open = true
         else open = false
+        console.log(open)
     }
 
     let selectClass = "unselected-list-card";
@@ -99,6 +106,17 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
+    // EDIT TOOLBAR FUNCTIONS
+    function handleAddNewSong() {
+        store.addNewSong();
+    }
+    function handleUndo() {
+        store.undo();
+    }
+    function handleRedo() {
+        store.redo();
+    }
     
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -108,6 +126,7 @@ function ListCard(props) {
         modalJSX = <MUIRemoveSongModal />;
     }
 
+    // LIST OF SONGS IN THE PLAYLIST
     let songListJSX = ""
     if (store.currentList != null) {
         songListJSX = 
@@ -123,6 +142,7 @@ function ListCard(props) {
                     ))}
                 </List>            
                 {modalJSX}
+
             </Box>
     }
 
@@ -140,11 +160,7 @@ function ListCard(props) {
                     key={idNamePair._id}
                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#FFFFFF', marginTop: '10px', display: 'flex', p: 1 }}
                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
-                    button
-                    // onClick={(event) => {
-                    //     handleLoadList(event, idNamePair._id)
-                    // }}
-                    >
+                    button>
                     <Box component="div" sx={{ p: 0, flexGrow: 1}}>{idNamePair.name}</Box>
                     <Box sx={{ p: 0 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
@@ -165,23 +181,31 @@ function ListCard(props) {
 
             <AccordionDetails>
                 <Grid Container overflow='hidden'>
-                    <Grid item xs={12} overflow='hidden' height='400px' style={{transform:"translate(0%,-10%)"}}>
+                    <Grid item xs={12} overflow='hidden' height='398px' style={{transform:"translate(0%,-10%)"}}>
                         {songListJSX}
                     </Grid>
 
                     {/* EDITING BUTTONS */}
 
-                    <Grid item xs={10}>
-                        
+                    <Grid item xs={10} sx={{transform: "translate(0%,-12%)"}}>
+                        <IconButton onClick={handleAddNewSong} color= 'secondary' aria-label='add-new-song'>
+                            <Add style={{fontSize:'32pt'}} />
+                        </IconButton>
+                        <IconButton onClick={handleUndo} color= 'secondary' aria-label='undo'>
+                            <Undo style={{fontSize:'32pt'}} />
+                        </IconButton>
+                        <IconButton onClick={handleRedo} color= 'secondary' aria-label='redo'>
+                            <Redo style={{fontSize:'32pt'}} />
+                        </IconButton>
                     </Grid>
 
                     {/* LIST MANIPULATION BUTTONS */}
 
                     <Grid item xs={2}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <IconButton onClick={handleToggleEdit} color= 'secondary' aria-label='edit'>
                             <EditIcon style={{fontSize:'32pt'}} />
                         </IconButton>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <IconButton onClick={handleToggleEdit} color= 'secondary' aria-label='edit'>
                             <EditIcon style={{fontSize:'32pt'}} />
                         </IconButton>
                     </Grid>
@@ -194,7 +218,6 @@ function ListCard(props) {
             <TextField
                 margin="normal"
                 required
-                
                 id={"list-" + idNamePair._id}
                 label="Playlist Name"
                 name="name"
@@ -208,7 +231,7 @@ function ListCard(props) {
                 autoFocus
                 variant='filled'
                 color='secondary'
-                sx={{p:1}}
+                sx={{p:0, transform: "translate(3.5%,0%)"}}
             />
     }
     return (

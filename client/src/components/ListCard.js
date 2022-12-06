@@ -194,7 +194,8 @@ function ListCard(props) {
                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
                     button
                 >
-                    <Box onClick={handleToggleEdit} component="div" sx={{ p: 0}}>{idNamePair.name}</Box>
+                    <Box onClick={handleToggleEdit} component="div" sx={{ p: 0 }}>{idNamePair.name}</Box>
+                    <Box></Box>
                 </Box>
             </AccordionSummary>
 

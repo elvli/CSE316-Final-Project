@@ -111,15 +111,15 @@ export default function AppBanner() {
                         </IconButton> */}
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ height: "90px", display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ height: "90px", width: "90px", display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
-                            size="large"
                             edge="end"
                             aria-label="account of current user"
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
                             bgcolor="#000000"
+                            sx={{height: "60px", width: "60px", transform: "translate(78%, 10%)" }}
                         >
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>

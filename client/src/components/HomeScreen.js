@@ -14,15 +14,19 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import YouTubePlayerExample from './YouTubePlaylisterReact';
 import CommentsTab from './CommentsTab'
-import Home from '@mui/icons-material/Home';
-import Groups from '@mui/icons-material/Groups';
-import Person from '@mui/icons-material/Person';
-import Sort from '@mui/icons-material/Sort';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import playlisterLogo from './images/playlisterLogo.png';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
+import Home from '@mui/icons-material/Home';
+import Groups from '@mui/icons-material/Groups';
+import Person from '@mui/icons-material/Person';
+import Sort from '@mui/icons-material/Sort';
+import Search from '@mui/icons-material/Search';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -34,6 +38,8 @@ const HomeScreen = () => {
     const [value, setValue] = React.useState(0)
     const [anchorEl, setAnchorEl] = useState(null);
     const [sortBy, setSortBy] = useState(-1);
+    const [query, setQuery] = useState("");
+    const [alignment, setAlignment] = React.useState('left');
     const isMenuOpen = Boolean(anchorEl);
 
     function TabPanel(props) {
@@ -67,39 +73,64 @@ const HomeScreen = () => {
 
     const handleChangeTab = (event, val) => {
         setValue(val)
-    }
-
+    };
     const handleHouseClick = () => {
         store.closeCurrentList();
-    }
-
+    };
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+
+    // THESE ARE THE HANDLERS FOR THE SEARCH BAR
+    const handleAlignment = (event, newAlignment) => {
+        setAlignment(newAlignment);
+    };
+    const handleQueryChange = (event) => {
+        setQuery(event.target.value)
+    };
+    const handleSearchQuery = () => {
+        // queriedList = queriedList.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase()));
+        store.idNamePairs = store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase()));
+        setSortBy(0);
+        // queriedList.forEach(pair => {
+        //     if (pair.name === query) console.log("banana")
+        // });
+    };
+
+    const downHandler = (event) => {
+        if (event.key === 'Backspace') {
+            store.loadIdNamePairs();
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("keydown", downHandler);
+        return () => {
+          window.removeEventListener("keydown", downHandler);
+        };
+      }, []);
 
     // THESE ARE THE HANDLERS FOR THE SORT MENU
     const handleSortName = () => {
         setSortBy(0);
         handleMenuClose();
-    }
+    };
     const handleSortPublishDate = () => {
         setSortBy(1);
         handleMenuClose();
-    }
+    };
     const handleSortListens = () => {
         setSortBy(2);
         handleMenuClose();
-    }
+    };
     const handleSortLikes = () => {
-        // setSortBy(3);
-        console.log(store.currentList);
-        console.log("PPPP:"+store.currentList.published)
+        setSortBy(3);
         handleMenuClose();
-    }
+    };
     const handleSortDislikes = () => {
         // setSortBy(4);
         // let playlists = store.getAllPlaylists();
@@ -107,7 +138,8 @@ const HomeScreen = () => {
         // // let list = playlists[0]
         // console.log(playlists[1])
         handleMenuClose();
-    }
+    };
+
 
     // THIS SWITCH CASE SORTS THE PLAYLISTS
     let sortedList = 
@@ -118,7 +150,7 @@ const HomeScreen = () => {
                 selected={false}
             />
         ));
-
+    
     switch(sortBy){
         case 0:
             sortedList = 
@@ -156,25 +188,40 @@ const HomeScreen = () => {
         store.createNewList();
     }
 
+
     let listCard = "";
     if (store) {
         listCard = 
             <Grid container sx={{p: 0}}>
                 <Grid item xs={10} bgcolor='#f397ff'>
-                    <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home" title="Home">
+
+
+                    {/* HOME BUTTON AND SEARCHBAR */}
+                    <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ml: "20px", color: 'black', transform: "translate(0%,-10%)" }} aria-label="home" title="Home">
                         <Home sx={{fontSize:'32pt'}}/>
                     </IconButton>
-                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="Groups" title="Groups">
-                        <Groups sx={{fontSize:'32pt'}}/>
+
+                    <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} sx={{ml: "10px", transform: "translate(0%,5%)" }} aria-label="text alignment">
+                        <ToggleButton value="left" sx={{color: 'black'}} aria-label="Groups" title="Search All Playlist">
+                            <Groups sx={{fontSize:'20pt'}}/>
+                        </ToggleButton>
+                        <ToggleButton value="right" variant='outlined' sx={{color: 'black'}} title="Search Users" aria-label="right aligned">
+                            <Person sx={{fontSize:'20pt'}}/>
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+
+                    <TextField onChange={handleQueryChange} variant='outlined' label='Search' sx={{ml: "20px", width: '40%'}} color='secondary'/>
+
+                    <IconButton onClick={handleSearchQuery} sx={{ml: "10px",color: 'black', transform: "translate(0%,-10%)" }} aria-label="{Person}" title="Search Users">
+                        <Search sx={{fontSize:'32pt'}}/>
                     </IconButton>
-                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="{Person}" title="Person">
-                        <Person sx={{fontSize:'32pt'}}/>
-                    </IconButton>
-                    <TextField id='Search-bar' variant='outlined' label='Search' sx={{width: '40%'}} color='secondary'/>
                 </Grid>
 
                 <Grid item xs={2} bgcolor='#f397ff' sx={{fontSize: 25}}>
-                    <IconButton onClick={handleMenuOpen} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60, transform:"translate(300%,-5%)"}} aria-label="Sort" title="Sort">
+
+
+                    {/* SORT MENU */}
+                    <IconButton onClick={handleMenuOpen} sx={{color: 'black', transform:"translate(300%,-5%)"}} aria-label="Sort" title="Sort">
                         <Sort sx={{fontSize:'32pt'}}/>
                     </IconButton>
                     <Menu
@@ -194,12 +241,14 @@ const HomeScreen = () => {
                     </Menu>
                 </Grid>
 
+
                 {/* PLAYLIST CARDS */}
                 <Grid item xs={7} sx={{height: '650px', maxHeight: '650px'}}>
                     <List sx={{width: '100%', backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)', mb:"20px", overflow: 'auto', maxHeight: 687, pt: 0}} >
                         {sortedList}
                     </List>
                 </Grid>
+
 
                 {/* VIDEOPLAYER AND COMMENTS */}
                 <Grid item xs={5}>
@@ -219,11 +268,12 @@ const HomeScreen = () => {
                     </TabPanel>
                 </Grid>
                 
+
                 {/* STATUSBAR */}
                 <Grid item xs={12}>
                     <Box sx={{transform:"translate(0%,5%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
                     width: '1536px', height: '50px', backgroundImage: 'linear-gradient(to bottom, #ffffff, #f397ff)', alignItem: 'center'}}>
-                        <IconButton onClick={handleCreateNewList} sx={{transform:"translate(0%, -15%)", textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="AddList" title="Add New List">
+                        <IconButton disabled={isGuest} onClick={handleCreateNewList} sx={{transform:"translate(0%, -15%)", textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="AddList" title="Add New List">
                             <PlaylistAdd  sx={{fontSize:'32pt'}}/>
                         </IconButton>
 
@@ -234,6 +284,7 @@ const HomeScreen = () => {
                 </Grid>
             </Grid>
     }
+
     return (
         <div id="playlist-selector">
             <div id="list-selector-heading">

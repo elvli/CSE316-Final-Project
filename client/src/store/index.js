@@ -31,7 +31,9 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    SAME_NAME: "SAME_NAME",
+    SORT_BY : "SORT_BY",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -42,7 +44,8 @@ const CurrentModal = {
     DELETE_LIST : "DELETE_LIST",
     EDIT_SONG : "EDIT_SONG",
     REMOVE_SONG : "REMOVE_SONG",
-    ERROR : "ERROR"
+    ERROR : "ERROR",
+    SAME_NAME : "SAME_NAME",
 }
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
@@ -58,7 +61,8 @@ function GlobalStoreContextProvider(props) {
         newListCounter: 0,
         listNameActive: false,
         listIdMarkedForDeletion: null,
-        listMarkedForDeletion: null
+        listMarkedForDeletion: null,
+        sortBy: -1,
     });
     const history = useHistory();
 
@@ -76,7 +80,7 @@ function GlobalStoreContextProvider(props) {
             // LIST UPDATE OF ITS NAME
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
                     currentList: payload.playlist,
                     currentSongIndex: -1,
@@ -84,13 +88,14 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             // STOP EDITING THE CURRENT LIST
             case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
@@ -98,13 +103,14 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 })
             }
             // CREATE A NEW LIST
             case GlobalStoreActionType.CREATE_NEW_LIST: {                
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
@@ -112,13 +118,14 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter + 1,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: payload,
                     currentList: null,
                     currentSongIndex: -1,
@@ -126,13 +133,14 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             // PREPARE TO DELETE A LIST
             case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
                 return setStore({
-                    currentModal : CurrentModal.DELETE_LIST,
+                    currentModal: CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
@@ -140,13 +148,14 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
-                    listMarkedForDeletion: payload.playlist
+                    listMarkedForDeletion: payload.playlist,
+                    sortBy: store.sortBy,
                 });
             }
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
@@ -154,27 +163,29 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             // START EDITING A LIST NAME
             case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: true,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             // 
             case GlobalStoreActionType.EDIT_SONG: {
                 return setStore({
-                    currentModal : CurrentModal.EDIT_SONG,
+                    currentModal: CurrentModal.EDIT_SONG,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
@@ -182,12 +193,13 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
                 return setStore({
-                    currentModal : CurrentModal.REMOVE_SONG,
+                    currentModal: CurrentModal.REMOVE_SONG,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
@@ -195,12 +207,13 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
                 return setStore({
-                    currentModal : CurrentModal.NONE,
+                    currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
@@ -208,7 +221,50 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
+                });
+            }
+            case GlobalStoreActionType.SAME_NAME: {
+                return setStore({
+                    currentModal: CurrentModal.SAME_NAME,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
+                });
+            }
+            case GlobalStoreActionType.SORT_BY: {
+                return setStore({
+                    currentModal: CurrentModal.SAME_NAME,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    sortBy: payload,
+                });
+            }
+            case GlobalStoreActionType.SORT: {
+                return setStore({
+                    currentModal: CurrentModal.SAME_NAME,
+                    idNamePairs: payload,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    sortBy: store.sortBy,
                 });
             }
             default:
@@ -302,6 +358,29 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    // THIS FUNCTION DUPLICATES THE CURRENT LIST
+    store.duplicateList = async function () {
+        let newListName = "" + store.currentList.name + "Copy" + store.newListCounter
+        const response = await api.createPlaylist(newListName, store.currentList.songs, auth.user.email);
+        console.log("duplicateList response: " + response);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            storeReducer({
+                type: GlobalStoreActionType.CREATE_NEW_LIST,
+                payload: null
+            });
+
+            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+            //history.push("/playlist/" + newList._id);
+            store.loadIdNamePairs();
+
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+    }
+
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
@@ -321,6 +400,53 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
+    // THE FOLLOWING FUNCTIONS ARE FOR SORTING THE LIST BASED ON THE 
+    // CRITERIA THE USER SELECTED
+    store.sortList = function (criteria) {
+        let sortedIdNamePairs = store.idNamePairs
+        switch(criteria){
+            case 0:
+                sortedIdNamePairs = store.idNamePairs.sort((a, b) => 
+                a.name.charAt(0) > b.name.charAt(0) ? 1 : -1);
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            default:
+                break
+        }
+
+
+        storeReducer({
+            type: GlobalStoreActionType.SORT,
+            payload: sortedIdNamePairs
+        });
+
+        // for (let i = 0; i < store.idNamePairs.length; i++){
+        //     console.log(store.idNamePairs[i].name + ",")
+        // }
+        // store.loadIdNamePairs();
+        console.log("SORT: " + store.sortBy)
+        console.log(sortedIdNamePairs)
+    }
+
+    store.setSort = function (criteria) {
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: criteria
+        });
+        console.log(criteria);
+    }
+    
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,
@@ -352,8 +478,6 @@ function GlobalStoreContextProvider(props) {
         store.deleteList(store.listIdMarkedForDeletion);
         store.hideModals();
     }
-    // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
-    // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
 
     store.showEditSongModal = (songIndex, songToEdit) => {
         storeReducer({
@@ -365,6 +489,12 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.REMOVE_SONG,
             payload: {currentSongIndex: songIndex, currentSong: songToRemove}
+        });        
+    }
+    store.showSameNameModal = () => {
+        storeReducer({
+            type: GlobalStoreActionType.SAME_NAME,
+            payload: null
         });        
     }
     store.hideModals = () => {
@@ -385,6 +515,9 @@ function GlobalStoreContextProvider(props) {
     }
     store.isErrorModalOpen = () => {
         return store.currentModal === CurrentModal.ERROR;
+    }
+    store.isSameNameModalOpen = () => {
+        return store.currentModal === CurrentModal.SAME_NAME;
     }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING

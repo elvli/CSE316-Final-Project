@@ -18,10 +18,13 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { useHistory } from 'react-router-dom'
 import SongCard from './SongCard.js'
-import MUIEditSongModal from './MUIEditSongModal'
-import MUIRemoveSongModal from './MUIRemoveSongModal'
 import Grid from '@mui/material/Grid';
 import * as React from 'react';
+
+import MUIEditSongModal from './MUIEditSongModal'
+import MUIRemoveSongModal from './MUIRemoveSongModal'
+import MUISameNameModal from './MUISameNameModal'
+
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -33,6 +36,7 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    const [listIndex, setListIndex] = useState(-1);
     const { idNamePair, selected } = props;
 
     store.history = useHistory();
@@ -60,7 +64,10 @@ function ListCard(props) {
 
     function handleToggleEdit(event) {
         event.stopPropagation();
-        toggleEdit();
+        if (event.detail === 2){
+            store.setCurrentList(idNamePair._id);
+            toggleEdit();
+        }
     }
 
     function toggleEdit() {
@@ -80,6 +87,12 @@ function ListCard(props) {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
+            for (let i = 0; i < store.idNamePairs.length; i++){
+                if (text === store.idNamePairs[i].name && store.currentList._id != store.idNamePairs[i]._id){
+                    store.showSameNameModal();
+                    return;
+                }
+            }
             let id = event.target.id.substring("list-".length);
             store.changeListName(id, event.target.value);
             toggleEdit();
@@ -93,8 +106,6 @@ function ListCard(props) {
     //  CONTROLLED ACCORDIAN HANDLER
     let open = false
     if (store.currentList){
-        console.log("soter:" + store.currentList._id)
-        console.log("soter:" + idNamePair._id)
         if (store.currentList._id == idNamePair._id) open = true
         else open = false
         console.log(open)
@@ -119,7 +130,15 @@ function ListCard(props) {
     function handleRedo() {
         store.redo();
     }
-    
+
+    // LIST MANIPULATION HANDLERS
+    function handlePublish() {
+        console.log('publish');
+    }
+    function handleDuplicate(){
+        store.duplicateList();
+    }
+
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
         modalJSX = <MUIEditSongModal />;
@@ -127,7 +146,9 @@ function ListCard(props) {
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
     }
-
+    else if (store.isSameNameModalOpen()){
+        modalJSX = <MUISameNameModal />
+    }
     // LIST OF SONGS IN THE PLAYLIST
     let songListJSX = ""
     if (store.currentList != null) {
@@ -162,14 +183,10 @@ function ListCard(props) {
                     key={idNamePair._id}
                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#FFFFFF', marginTop: '10px', display: 'flex', p: 1 }}
                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
-                    button>
-                    <Box component="div" sx={{ p: 0, flexGrow: 1}}>{idNamePair.name}</Box>
-                    <Box sx={{ p: 0 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <EditIcon style={{fontSize:'32pt'}} />
-                        </IconButton>
-                    </Box>
-                    <Box sx={{ p: 0 }}>
+                    button
+                >
+                    <Box onClick={handleToggleEdit} component="div" sx={{ p: 0}}>{idNamePair.name}</Box>
+                    <Box sx={{float: "right", p: 0, transform:"translate(900%, 0%)"}}>
                         <IconButton onClick={(event) => {
                             handleDeleteList(event, idNamePair._id)
                             }} aria-label='delete'>
@@ -190,26 +207,26 @@ function ListCard(props) {
                     {/* EDITING BUTTONS */}
 
                     <Grid item xs={10} sx={{transform: "translate(0%,-12%)"}}>
-                        <IconButton onClick={handleAddNewSong} color= 'secondary' aria-label='add-new-song'>
+                        <IconButton onClick={handleAddNewSong} color='secondary' aria-label='add-new-song'>
                             <Add style={{fontSize:'32pt'}} />
                         </IconButton>
-                        <IconButton onClick={handleUndo} color= 'secondary' aria-label='undo'>
+                        <IconButton onClick={handleUndo} color='secondary' aria-label='undo'>
                             <Undo style={{fontSize:'32pt'}} />
                         </IconButton>
-                        <IconButton onClick={handleRedo} color= 'secondary' aria-label='redo'>
+                        <IconButton onClick={handleRedo} color='secondary' aria-label='redo'>
                             <Redo style={{fontSize:'32pt'}} />
                         </IconButton>
-                    </Grid>
 
-                    {/* LIST MANIPULATION BUTTONS */}
-
-                    <Grid item xs={2}>
-                        <IconButton onClick={handleToggleEdit} color= 'secondary' aria-label='edit'>
-                            <Publish style={{fontSize:'32pt'}} />
-                        </IconButton>
-                        <IconButton onClick={handleToggleEdit} color= 'secondary' aria-label='edit'>
-                            <ContentCopy style={{fontSize:'32pt'}} />
-                        </IconButton>
+                        {/* LIST MANIPULATION BUTTONS */}
+                        <Box sx={{float: "right", transform:"translate(110%, 0%)"}}>
+                            <IconButton onClick={handlePublish} color='secondary' aria-label='publish'>
+                                <Publish style={{fontSize:'32pt'}} />
+                            </IconButton>
+                            <IconButton onClick={handleDuplicate} color='secondary' aria-label='duplicate'>
+                                <ContentCopy style={{fontSize:'32pt'}} />
+                            </IconButton>
+                        </Box>
+                        
                     </Grid>
                 </Grid>
             </AccordionDetails>

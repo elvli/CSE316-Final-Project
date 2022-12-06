@@ -18,9 +18,11 @@ export default function YouTubePlayerExample() {
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [
-        "YxksUfnuEbI",
-        "D9G1VOjN_84",
+        "2S24-y0Ij3Y",
+        "b73BI9eUkjM",
         "wXhTHyIgQ_U",
+        "ytQ5CYE1VZw",
+        "kXYiU_JCYtU"
     ];
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST

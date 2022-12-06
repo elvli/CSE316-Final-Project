@@ -80,6 +80,33 @@ const HomeScreen = () => {
         setAnchorEl(null);
     };
 
+    const handleSortName = () => {
+        store.setSort(0);
+        store.sortList(0);
+        handleMenuClose();
+        console.log("123123: " + store.sortBy)
+    }
+
+    const handleSortPublishDate = () => {
+        
+        handleMenuClose()
+    }
+
+    const handleSortListens = () => {
+        
+        handleMenuClose()
+    }
+
+    const handleSortLikes = () => {
+        
+        handleMenuClose()
+    }
+
+    const handleSortDislikes = () => {
+
+        handleMenuClose()
+    }
+
     // FOR THE STATUS BAR
     let text ="";
     if (auth.loggedIn && store.currentList){
@@ -126,11 +153,11 @@ const HomeScreen = () => {
                         'aria-labelledby': 'basic-button',
                         }}
                     >
-                        <MenuItem onClick={handleMenuClose}>Name (A-Z)</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Publish Date (Newest)</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Listens (High - Low)</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Likes (High - Low)</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Dislikes (High - Low)</MenuItem>
+                        <MenuItem onClick={handleSortName}>Name (A-Z)</MenuItem>
+                        <MenuItem onClick={handleSortPublishDate}>Publish Date (Newest)</MenuItem>
+                        <MenuItem onClick={handleSortListens}>Listens (High - Low)</MenuItem>
+                        <MenuItem onClick={handleSortLikes}>Likes (High - Low)</MenuItem>
+                        <MenuItem onClick={handleSortDislikes}>Dislikes (High - Low)</MenuItem>
                     </Menu>
                 </Grid>
 

@@ -145,16 +145,16 @@ export default function YouTubePlayerExample() {
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', m: 'auto' ,pl: 1, pb: 1}}>                                
-                    <IconButton onClick={handlePrevious} aria-label="previous" color= 'secondary'>
+                    <IconButton onClick={handlePrevious} aria-label="previous" color= 'secondary' title="Previous">
                         <SkipPreviousIcon sx={{height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton onClick={handlePause} aria-label="pause" color= 'secondary'>
+                    <IconButton onClick={handlePause} aria-label="pause" color= 'secondary' title="Pause">
                         <Pause sx={{ height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton onClick={handlePlay} aria-label="play/pause" color= 'secondary'>
+                    <IconButton onClick={handlePlay} aria-label="play/pause" color= 'secondary' title="Play">
                         <PlayArrowIcon sx={{ height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton onClick={handleNext} aria-label="next" color= 'secondary'>
+                    <IconButton onClick={handleNext} aria-label="next" color= 'secondary' title="Next">
                         <SkipNextIcon sx={{ height: 38, width: 38 }} />
                     </IconButton>
                 </Box>

@@ -103,6 +103,10 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function handlePublishList() {
+        store.handlePublishList()
+    }
+
     //  CONTROLLED ACCORDIAN HANDLER
     let open = false
     if (store.currentList){
@@ -133,10 +137,15 @@ function ListCard(props) {
 
     // LIST MANIPULATION HANDLERS
     function handlePublish() {
-        console.log('publish');
+        store.publishList();
     }
     function handleDuplicate(){
         store.duplicateList();
+    }
+
+    let isPublished = false
+    if (store.currentList && store.currentList.published){
+        isPublished = true
     }
 
     let modalJSX = "";
@@ -186,13 +195,6 @@ function ListCard(props) {
                     button
                 >
                     <Box onClick={handleToggleEdit} component="div" sx={{ p: 0}}>{idNamePair.name}</Box>
-                    <Box sx={{float: "right", p: 0, transform:"translate(900%, 0%)"}}>
-                        <IconButton onClick={(event) => {
-                            handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
-                            <DeleteIcon style={{fontSize:'32pt'}} />
-                        </IconButton>
-                    </Box>
                 </Box>
             </AccordionSummary>
 
@@ -207,26 +209,32 @@ function ListCard(props) {
                     {/* EDITING BUTTONS */}
 
                     <Grid item xs={10} sx={{transform: "translate(0%,-12%)"}}>
-                        <IconButton onClick={handleAddNewSong} color='secondary' aria-label='add-new-song'>
+                        <IconButton onClick={handleAddNewSong} disabled={isPublished} color='secondary' aria-label='add-new-song' title="Add New Song">
                             <Add style={{fontSize:'32pt'}} />
                         </IconButton>
-                        <IconButton onClick={handleUndo} color='secondary' aria-label='undo'>
+                        <IconButton onClick={handleUndo} disabled={!store.canUndo() || isPublished} color='secondary' aria-label='undo' title="Undo">
                             <Undo style={{fontSize:'32pt'}} />
                         </IconButton>
-                        <IconButton onClick={handleRedo} color='secondary' aria-label='redo'>
+                        <IconButton onClick={handleRedo} disabled={!store.canRedo() || isPublished} color='secondary' aria-label='redo' title="Redo">
                             <Redo style={{fontSize:'32pt'}} />
                         </IconButton>
 
                         {/* LIST MANIPULATION BUTTONS */}
-                        <Box sx={{float: "right", transform:"translate(110%, 0%)"}}>
-                            <IconButton onClick={handlePublish} color='secondary' aria-label='publish'>
-                                <Publish style={{fontSize:'32pt'}} />
-                            </IconButton>
-                            <IconButton onClick={handleDuplicate} color='secondary' aria-label='duplicate'>
+                        <Box sx={{float: "right", transform:"translate(180%, 0%)"}}>
+                            <IconButton onClick={handleDuplicate} color='secondary' aria-label='duplicate' title="Duplicate List">
                                 <ContentCopy style={{fontSize:'32pt'}} />
                             </IconButton>
                         </Box>
-                        
+                        <Box sx={{float: "right", transform:"translate(180%, 0%)"}}>
+                            <IconButton onClick={(event) => {handleDeleteList(event, idNamePair._id)}} color='secondary' aria-label='delete' title="Delete List">
+                                <DeleteIcon style={{fontSize:'32pt'}} />
+                            </IconButton>
+                        </Box>
+                        <Box sx={{float: "right", transform:"translate(180%, 0%)"}}>
+                            <IconButton onClick={handlePublish} disabled={isPublished} color='secondary' aria-label='publish' title="Publish List">
+                                <Publish style={{fontSize:'32pt'}} />
+                            </IconButton>
+                        </Box>
                     </Grid>
                 </Grid>
             </AccordionDetails>

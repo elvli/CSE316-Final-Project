@@ -33,6 +33,7 @@ const HomeScreen = () => {
     const { auth } = useContext(AuthContext);
     const [value, setValue] = React.useState(0)
     const [anchorEl, setAnchorEl] = useState(null);
+    const [sortBy, setSortBy] = useState(-1);
     const isMenuOpen = Boolean(anchorEl);
 
     function TabPanel(props) {
@@ -80,34 +81,69 @@ const HomeScreen = () => {
         setAnchorEl(null);
     };
 
+    // THESE ARE THE HANDLERS FOR THE SORT MENU
     const handleSortName = () => {
-        store.setSort(0);
-        store.sortList(0);
+        setSortBy(0);
         handleMenuClose();
-        console.log("123123: " + store.sortBy)
     }
-
     const handleSortPublishDate = () => {
-        
-        handleMenuClose()
+        setSortBy(1);
+        handleMenuClose();
     }
-
     const handleSortListens = () => {
-        
-        handleMenuClose()
+        setSortBy(2);
+        handleMenuClose();
     }
-
     const handleSortLikes = () => {
-        
-        handleMenuClose()
+        // setSortBy(3);
+        console.log(store.currentList);
+        console.log("PPPP:"+store.currentList.published)
+        handleMenuClose();
     }
-
     const handleSortDislikes = () => {
-
-        handleMenuClose()
+        // setSortBy(4);
+        // let playlists = store.getAllPlaylists();
+        // console.log(store.getAllPlaylists()[1])
+        // // let list = playlists[0]
+        // console.log(playlists[1])
+        handleMenuClose();
     }
 
-    // FOR THE STATUS BAR
+    // THIS SWITCH CASE SORTS THE PLAYLISTS
+    let sortedList = 
+        store.idNamePairs.map((pair) => (
+            <ListCard
+                key={pair._id}
+                idNamePair={pair}
+                selected={false}
+            />
+        ));
+
+    switch(sortBy){
+        case 0:
+            sortedList = 
+                store.idNamePairs.sort((a, b) => 
+                    a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1)
+                    .map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                ));
+            break;
+        case 1:
+            // let playlists = store.getAllPlaylists();
+
+            // sortedList = 
+            //     playlists.sort((a, b) =>
+            //         a.up
+            //     );
+            break;
+        default:
+            break;
+    }
+
     let text ="";
     if (auth.loggedIn && store.currentList){
         text = store.currentList.name;
@@ -125,25 +161,22 @@ const HomeScreen = () => {
         listCard = 
             <Grid container sx={{p: 0}}>
                 <Grid item xs={10} bgcolor='#f397ff'>
-                    <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home">
+                    <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="home" title="Home">
                         <Home sx={{fontSize:'32pt'}}/>
                     </IconButton>
-                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="Groups">
+                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="Groups" title="Groups">
                         <Groups sx={{fontSize:'32pt'}}/>
                     </IconButton>
-                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="{Person}">
+                    <IconButton href='/' onClick={handleHouseClick} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60 }} aria-label="{Person}" title="Person">
                         <Person sx={{fontSize:'32pt'}}/>
                     </IconButton>
                     <TextField id='Search-bar' variant='outlined' label='Search' sx={{width: '40%'}} color='secondary'/>
                 </Grid>
 
                 <Grid item xs={2} bgcolor='#f397ff' sx={{fontSize: 25}}>
-                    <Typography sx={{fontSize: 25, fontWeight: 'bold', transform:"translate(30%,0%)"}}>
-                        Sort By
-                    <IconButton onClick={handleMenuOpen} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60, transform:"translate(20%,-5%)"}} aria-label="Sort">
+                    <IconButton onClick={handleMenuOpen} sx={{ textDecoration: 'none', color: 'black', height: 60, width: 60, transform:"translate(300%,-5%)"}} aria-label="Sort" title="Sort">
                         <Sort sx={{fontSize:'32pt'}}/>
                     </IconButton>
-                    </Typography>
                     <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
@@ -164,16 +197,7 @@ const HomeScreen = () => {
                 {/* PLAYLIST CARDS */}
                 <Grid item xs={7} sx={{height: '650px', maxHeight: '650px'}}>
                     <List sx={{width: '100%', backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)', mb:"20px", overflow: 'auto', maxHeight: 687, pt: 0}} >
-                    {
-                        store.idNamePairs.map((pair) => (
-                            <ListCard
-                                key={pair._id}
-                                idNamePair={pair}
-                                selected={false}
-                            />
-                        ))
-                        
-                    }
+                        {sortedList}
                     </List>
                 </Grid>
 
@@ -199,7 +223,7 @@ const HomeScreen = () => {
                 <Grid item xs={12}>
                     <Box sx={{transform:"translate(0%,5%)", display: 'flex', justifyContent: 'center', position: 'absolute',  
                     width: '1536px', height: '50px', backgroundImage: 'linear-gradient(to bottom, #ffffff, #f397ff)', alignItem: 'center'}}>
-                        <IconButton onClick={handleCreateNewList} sx={{transform:"translate(0%, -15%)", textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="AddList">
+                        <IconButton onClick={handleCreateNewList} sx={{transform:"translate(0%, -15%)", textDecoration: 'none', color: 'black', height: 60, width: 60}} aria-label="AddList" title="Add New List">
                             <PlaylistAdd  sx={{fontSize:'32pt'}}/>
                         </IconButton>
 

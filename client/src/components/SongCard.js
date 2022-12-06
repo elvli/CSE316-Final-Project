@@ -3,6 +3,8 @@ import { GlobalStoreContext } from '../store'
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Close from '@mui/icons-material/Close';
+import Edit from '@mui/icons-material/Edit';
+import { resolveBreakpointValues } from '@mui/system/breakpoints';
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
@@ -41,13 +43,20 @@ function SongCard(props) {
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
-        if (event.detail === 2) {
-            console.log("double clicked");
-            store.showEditSongModal(index, song);
-        }
+        store.setCurrentSong(index, store.currentList.songs[index]);
+        console.log("songIndex: " + store.currentSongIndex)
+        if (store.currentSong)
+            console.log("songPlaying: " + store.currentSong.title)
+
     }
 
-    let cardClass = "list-card unselected-list-card";
+    function handleEdit() {
+        store.showEditSongModal(index, song)
+    }
+
+    let cardClass = "unselected-list-card";
+    if (index === store.currentSongIndex) cardClass = "selected-list-card"
+
     return (
         <div
             key={index}
@@ -68,14 +77,17 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            {/* <Button
-                sx={{transform:"translate(-5%, -5%)", width:"5px", height:"30px"}}
-                variant="contained"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                onClick={handleRemoveSong}>{"\u2715"}</Button> */}
             <IconButton
-                sx={{transform:"translate(-5%, -5%)", width:"5px", height:"30px"}}
+                sx={{transform:"translate(-300%, -5%)", width:"5px", height:"30px"}}
+                variant="contained"
+                id={"edit-song-" + index}
+                className="list-card-button"
+                onClick={handleEdit}
+                color="secondary">
+                <Edit/>
+            </IconButton>
+            <IconButton
+                sx={{transform:"translate(100%, -5%)", width:"5px", height:"30px"}}
                 variant="contained"
                 id={"remove-song-" + index}
                 className="list-card-button"

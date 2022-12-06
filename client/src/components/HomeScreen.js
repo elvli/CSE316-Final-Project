@@ -32,6 +32,32 @@ import Search from '@mui/icons-material/Search';
     
     @author McKilla Gorilla
 */
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+        {value === index && (
+            <Box sx={{ p: 3 }}>
+                <Typography>{children}</Typography>
+            </Box>
+        )}
+        </div>
+    );
+}
+  
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -41,32 +67,6 @@ const HomeScreen = () => {
     const [query, setQuery] = useState("");
     const [alignment, setAlignment] = React.useState('left');
     const isMenuOpen = Boolean(anchorEl);
-
-    function TabPanel(props) {
-        const { children, value, index, ...other } = props;
-      
-        return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`simple-tabpanel-${index}`}
-                aria-labelledby={`simple-tab-${index}`}
-                {...other}
-            >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-            </div>
-        );
-    }
-      
-    TabPanel.propTypes = {
-        children: PropTypes.node,
-        index: PropTypes.number.isRequired,
-        value: PropTypes.number.isRequired,
-    };
       
     let isGuest = false;
     if (auth.user && auth.user.email == "guest@gmail.com") isGuest = true;
@@ -101,38 +101,38 @@ const HomeScreen = () => {
         // });
     };
 
-    const downHandler = (event) => {
-        if (event.key === 'Backspace') {
-            store.loadIdNamePairs();
-        }
-    }
+    // const downHandler = (event) => {
+    //     if (event.key === 'Backspace') {
+    //         store.loadIdNamePairs();
+    //     }
+    // }
 
-    useEffect(() => {
-        window.addEventListener("keydown", downHandler);
-        return () => {
-          window.removeEventListener("keydown", downHandler);
-        };
-      }, []);
+    // useEffect(() => {
+    //     window.addEventListener("keydown", downHandler);
+    //     return () => {
+    //       window.removeEventListener("keydown", downHandler);
+    //     };
+    //   }, []);
 
     // THESE ARE THE HANDLERS FOR THE SORT MENU
     const handleSortName = () => {
-        setSortBy(0);
+        store.sortList(0);
         handleMenuClose();
     };
     const handleSortPublishDate = () => {
-        setSortBy(1);
+        store.sortList(1);
         handleMenuClose();
     };
     const handleSortListens = () => {
-        setSortBy(2);
+        store.sortList(2);
         handleMenuClose();
     };
     const handleSortLikes = () => {
-        setSortBy(3);
+        store.sortList(3);
         handleMenuClose();
     };
     const handleSortDislikes = () => {
-        // setSortBy(4);
+        // store.sortList(3);
         // let playlists = store.getAllPlaylists();
         // console.log(store.getAllPlaylists()[1])
         // // let list = playlists[0]

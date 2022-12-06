@@ -10,7 +10,7 @@
   --swatch-primary: #e6e6e6;
   --swatch-complement: #e1e4cb;
   --swatch-contrast: #111111;
-  --swatch-accent: #669966;
+  --swatch-accent: #f397ff;
   --swatch-status: #123456;
   --my-font-family: "Robaaaoto";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
@@ -157,8 +157,14 @@ body {
 
 
 .list-card,
-.selected-list-card,
 .unselected-list-card {
+  font-size: 18pt;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.selected-list-card {
   font-size: 18pt;
   margin: 10px;
   padding: 20px;

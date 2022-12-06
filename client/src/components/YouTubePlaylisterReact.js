@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useRef, useState} from 'react'
 import YouTube from 'react-youtube';
 import { GlobalStoreContext } from '../store/index.js'
 import Box from '@mui/material/Box'
@@ -13,20 +13,30 @@ import Pause from '@mui/icons-material/Pause';
 
 export default function YouTubePlayerExample() {
     const { store } = useContext(GlobalStoreContext);
-
-    let eventTarget = null;
+    const {allSongs, setAllSongs} = useState(null);
+    const playerRef = useRef(null);
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = [
-        "2S24-y0Ij3Y",
-        "b73BI9eUkjM",
-        "wXhTHyIgQ_U",
-        "ytQ5CYE1VZw",
-        "kXYiU_JCYtU"
-    ];
+    let titles = [];
+    let artists = [];
+    let playlist = [];
+
+    if (store.currentList){
+        let songs = store.currentList.songs;
+        titles = [];
+        artists = [];
+        playlist = [];
+
+        songs.forEach(song => { 
+            titles.push(song.title)
+            artists.push(song.artist)
+            playlist.push(song.youTubeId)
+        });
+
+    }
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let currentSong = 0;
+    let currentSong = store.currentSongIndex;
 
     const playerOptions = {
         height: '360',
@@ -57,13 +67,10 @@ export default function YouTubePlayerExample() {
         currentSong--;
         if (currentSong < 0) {currentSong = playlist.length - 1}
         console.log("index: " + currentSong);
-        currentSong = currentSong % playlist.length;
     }
 
     function onPlayerReady(event) {
-        eventTarget = event.target
-        loadAndPlayCurrentSong(event.target);
-        event.target.playVideo();
+        playerRef.current = event.target
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -99,34 +106,24 @@ export default function YouTubePlayerExample() {
     const handlePrevious = () => {
         console.log("handlePrevious")
         decSong();
-        loadAndPlayCurrentSong(eventTarget);
+        loadAndPlayCurrentSong(playerRef.current);
     }
     const handlePause = () => {
-        eventTarget.pauseVideo();
+        playerRef.current.pauseVideo()
     }
     const handlePlay = () => {
-        eventTarget.playVideo();
+        playerRef.current.playVideo();
     }
     const handleNext = () => {
         incSong();
-        loadAndPlayCurrentSong(eventTarget);
+        loadAndPlayCurrentSong(playerRef.current);
     }
     
-    let playlistName = "Playlist";
-    if (store.CurrentList != null) {
-        playlist = store.currentList.name
+    let playlistName = "";
+    if (store.currentList) {
+        playlistName = store.currentList.name
     }
 
-    let title = "Title";
-    if (store.currentSong != null) {
-        title = store.currentSong.title
-    };
-
-    let artist = "Artist";
-    if (store.currentSong != null) {
-        artist = store.currentSong.artist
-    };
-    
     let infoCard = 
         <Card elevation={3}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -135,26 +132,27 @@ export default function YouTubePlayerExample() {
                         Playlist: {playlistName}
                     </Typography>
                     <Typography component="div" variant="h5">
-                        Title: {playlist[currentSong]}
+                        Title: {titles[store.currentSongIndex]}
                     </Typography>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
-                        Artist: {artist}
+                        Artist: {artists[store.currentSongIndex]}
                     </Typography>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
-                        Song: {currentSong + 1}
+                        Song: {store.currentSongIndex + 1}
                     </Typography>
                 </CardContent>
+
                 <Box sx={{ display: 'flex', m: 'auto' ,pl: 1, pb: 1}}>                                
-                    <IconButton onClick={handlePrevious} aria-label="previous" color= 'secondary' title="Previous">
+                    <IconButton onClick={handlePrevious} id="prevBtn"aria-label="previous" color= 'secondary' title="Previous">
                         <SkipPreviousIcon sx={{height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton onClick={handlePause} aria-label="pause" color= 'secondary' title="Pause">
+                    <IconButton onClick={handlePause} id="pauseBtn" aria-label="pause" color= 'secondary' title="Pause">
                         <Pause sx={{ height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton onClick={handlePlay} aria-label="play/pause" color= 'secondary' title="Play">
+                    <IconButton onClick={handlePlay} id="playBtn" aria-label="play/pause" color= 'secondary' title="Play">
                         <PlayArrowIcon sx={{ height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton onClick={handleNext} aria-label="next" color= 'secondary' title="Next">
+                    <IconButton onClick={handleNext} id="nextBtn" aria-label="next" color= 'secondary' title="Next">
                         <SkipNextIcon sx={{ height: 38, width: 38 }} />
                     </IconButton>
                 </Box>
@@ -163,6 +161,8 @@ export default function YouTubePlayerExample() {
 
     return <>
             <YouTube
+            id="youTubePlayer"
+            ref={playerRef}
             videoId={playlist[currentSong]}
             opts={playerOptions}
             onReady={onPlayerReady}

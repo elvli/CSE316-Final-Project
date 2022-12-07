@@ -459,6 +459,61 @@ function GlobalStoreContextProvider(props) {
         }
         asyncAddComment()
     }
+
+    store.likeList = function (email, idNamePair, user) {
+        async function asyncGetPlaylist(id){
+            let response = await api.getPlaylistById(id)
+            if (response.data.success){
+                let playlist = response.data.playlist;
+                if (idNamePair.likes.indexOf(user.email) > -1){
+                    playlist.likes.splice(playlist.likes.indexOf(email), 1)
+                }
+                else if(idNamePair.dislikes.indexOf(user.email) > -1){
+                    playlist.dislikes.splice(playlist.dislikes.indexOf(email), 1)
+                    playlist.likes.push(email);
+                }
+                else{
+                    playlist.likes.push(email);
+                }
+                async function updatePlaylist(id ,playlist){
+                    response = await api.updateUserFeedback(id, playlist);
+                    if (response.data.success){
+                        store.loadIdNamePairs();
+                    }
+                }
+                updatePlaylist(id, playlist)
+            }
+        }
+        asyncGetPlaylist(idNamePair._id)
+    }
+
+    store.dislikeList = function(email, idNamePair, user) {
+        async function asyncGetPlaylist(id){
+            let response = await api.getPlaylistById(id)
+            if (response.data.success){
+                let playlist = response.data.playlist;
+                if (idNamePair.dislikes.indexOf(user.email) > -1){
+                    playlist.dislikes.splice(playlist.likes.indexOf(email), 1)
+                }
+                else if(idNamePair.likes.indexOf(user.email) > -1){
+                    playlist.likes.splice(playlist.dislikes.indexOf(email), 1)
+                    playlist.dislikes.push(email);
+                }
+                else{
+                    playlist.dislikes.push(email);
+                }
+                async function updatePlaylist(id ,playlist){
+                    response = await api.updateUserFeedback(id, playlist);
+                    if (response.data.success){
+                        store.loadIdNamePairs();
+                    }
+                }
+                updatePlaylist(id, playlist)
+            }
+        }
+        asyncGetPlaylist(idNamePair._id)
+    }
+
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,

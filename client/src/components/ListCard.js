@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -37,6 +38,7 @@ import MUISameNameModal from './MUISameNameModal'
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [listIndex, setListIndex] = useState(-1);
@@ -158,6 +160,15 @@ function ListCard(props) {
             </Typography>
     }
 
+    function handleLike(event) {
+        event.stopPropagation();
+        store.likeList(auth.user.email, idNamePair, auth.user)
+    }
+    function handleDislike(event) {
+        event.stopPropagation();
+        store.dislikeList(auth.user.email, idNamePair, auth.user)
+    }
+
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
         modalJSX = <MUIEditSongModal />;
@@ -196,7 +207,7 @@ function ListCard(props) {
             elevation={3}
             disableGutters={true}
             sx={{ borderRadius: "4px", margin: "20px", mt: '10px' }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                 <Box
                     id={idNamePair._id}
                     key={idNamePair._id}
@@ -204,29 +215,37 @@ function ListCard(props) {
                     style={{ transform: "translate(1%,0%)", width: '98%', fontSize: '48pt' }}
                     button
                 >
-                    <Grid container direction='column'>
-                        <Grid item>
-                            <Grid container>
-                                <Grid item xs={8}>
-                                    <Box onClick={handleToggleEdit} component="div" sx={{ fontSize: "34px", p: 0 }}>{idNamePair.name}</Box>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <IconButton onClick={handleAddNewSong} disabled={!isPublished} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='like' title="like">
-                                        <ThumbUp style={{ fontSize: '32pt' }} />
-                                    </IconButton>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <IconButton onClick={handleUndo} disabled={!isPublished} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='dislike' title="dislike">
-                                        <ThumbDown style={{ fontSize: '32pt' }} />
-                                    </IconButton>
-                                </Grid>
+                    <Grid container>
+                        <Grid item xs={8}>
+                            <Grid item xs={8}>
+                                <Box onClick={handleToggleEdit} component="div" sx={{ fontSize: "34px", p: 0 }}>{idNamePair.name}</Box>
                             </Grid>
+
                             <Grid item>
                                 <Typography sx={{ fontFamily: "Lexend Exa", fontSize: '18px' }}>
                                     By: {idNamePair.ownerName}
                                 </Typography>
                                 {datePublished}
                             </Grid>
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <IconButton onClick={handleLike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='like' title="like">
+                                <ThumbUp style={{ fontSize: '32pt' }} />
+                                <Typography sx={{ transform: "translate(30%,0%)" }}>
+                                    {idNamePair.likes.length}
+                                </Typography>
+                            </IconButton>
+
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <IconButton onClick={handleDislike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='dislike' title="dislike">
+                                <ThumbDown style={{ fontSize: '32pt' }} />
+                                <Typography sx={{ transform: "translate(30%,0%)" }}>
+                                    {idNamePair.dislikes.length}
+                                </Typography>
+                            </IconButton>
                         </Grid>
                     </Grid>
                 </Box>

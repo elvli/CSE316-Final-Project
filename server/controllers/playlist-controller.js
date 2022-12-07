@@ -304,6 +304,53 @@ updateUserFeedback = async (req, res) => {
                         })
     })
 }
+getPublishedLists = async (req, res) => {
+    if(auth.verifyUser(req) === null){
+        return res.status(400).json({
+            errorMessage: 'UNAUTHORIZED'
+        })
+    }
+    console.log("getPublishedLists");
+    await User.findOne({ _id: req.userId }, (err, user) => {
+        console.log("find user with id " + req.userId);
+        async function asyncFindList() {
+            await Playlist.find({ published: true }, (err, playlists) => {
+                console.log("found Playlists: " + JSON.stringify(playlists));
+                if (err) {
+                    return res.status(400).json({ success: false, error: err })
+                }
+                if (!playlists) {
+                    console.log("!playlists.length");
+                    return res
+                        .status(404)
+                        .json({ success: false, error: 'Playlists not found' })
+                }
+                else {
+                    console.log("Send the Published Playlist pairs");
+                    // PUT ALL THE LISTS INTO ID, NAME PAIRS
+                    let pairs = [];
+                    for (let key in playlists) {
+                        let list = playlists[key];
+                        let pair = {
+                            _id: list._id,
+                            name: list.name,
+                            ownerEmail: list.ownerEmail,
+                            ownerName: user.firstName + ' ' + user.lastName,
+                            published: list.published,
+                            publishedDate: list.publishedDate,
+                            likes: list.likes,
+                            dislikes: list.dislikes,
+                            listens: list.listens,
+                        };
+                        pairs.push(pair);
+                    }
+                    return res.status(200).json({ success: true, idNamePairs: pairs })
+                }
+            }).catch(err => console.log(err))
+        }
+        asyncFindList();
+    }).catch(err => console.log(err))
+}
 module.exports = {
     createPlaylist,
     deletePlaylist,
@@ -311,5 +358,6 @@ module.exports = {
     getPlaylistPairs,
     getPlaylists,
     updatePlaylist,
-    updateUserFeedback
+    updateUserFeedback,
+    getPublishedLists,
 }

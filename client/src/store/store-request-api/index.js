@@ -51,6 +51,7 @@ export const updateUserFeedback = (id, playlist) => {
         playlist : playlist
     })
 }
+export const getPublishedLists = () => api.get('/playlists/')
 
 const apis = {
     createPlaylist,
@@ -59,6 +60,7 @@ const apis = {
     getPlaylistPairs,
     updatePlaylistById,
     updateUserFeedback,
+    getPublishedLists,
 }
 
 export default apis

@@ -90,6 +90,16 @@ const HomeScreen = () => {
         setQuery(event.target.value)
     };
 
+    const handleHome = () => {
+        store.loadIdNamePairs();
+    }
+    const handleAllLists = () => {
+        store.loadPublishedLists();
+    }
+    const handleAllUsers = () => {
+        store.loadPublishedLists();
+    }
+
     // THESE ARE THE HANDLERS FOR THE SORT MENU
     const handleSortName = () => {
         store.sortList(0);
@@ -117,15 +127,18 @@ const HomeScreen = () => {
     };
 
     // THIS SWITCH CASE SORTS THE PLAYLISTS
-    let sortedList = 
-        store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase())).map((pair) => (
+    let sortedList = ""
+
+    if (store.idNamePairs) {
+        sortedList = store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase())).map((pair) => (
             <ListCard
                 key={pair._id}
                 idNamePair={pair}
                 selected={false}
             />
         ));
-    
+    }
+
     switch(sortBy){
         case 0:
             sortedList = 
@@ -162,13 +175,13 @@ const HomeScreen = () => {
 
                     {/* HOME BUTTON AND SEARCHBAR */}
                     <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} sx={{ml: "10px", transform: "translate(6.5%, 5%)" }} aria-label="text alignment">
-                        <ToggleButton value="home" sx={{color: 'black'}} disabled={isGuest} aria-label="home" title="Home">
+                        <ToggleButton onClick={handleHome} value="home" sx={{color: 'black'}} disabled={isGuest} aria-label="home" title="Home">
                             <Home sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
-                        <ToggleButton value="allLists" sx={{color: 'black'}} aria-label="Groups" title="Search All Playlist">
+                        <ToggleButton onClick={handleAllLists} value="allLists" sx={{color: 'black'}} aria-label="Groups" title="Search All Playlist">
                             <Groups sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
-                        <ToggleButton value="allUsers" sx={{color: 'black'}} title="Search All Users" aria-label="right aligned">
+                        <ToggleButton onClick={handleAllUsers} value="allUsers" sx={{color: 'black'}} title="Search All Users" aria-label="right aligned">
                             <Person sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
                     </ToggleButtonGroup>

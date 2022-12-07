@@ -39,7 +39,7 @@ export default function MUIEditSongModal() {
             open={store.currentModal === "EDIT_SONG"}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            hideBackdrop={true}
+            hideBackdrop={false}
             PaperProps={{
                 elevation: 0,
                 sx: {border: "solid 1px gray",}

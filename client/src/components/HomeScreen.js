@@ -210,7 +210,7 @@ const HomeScreen = () => {
                         </ToggleButton>
                     </ToggleButtonGroup>
 
-                    <TextField onChange={handleQueryChange} variant='outlined' label='Search' sx={{ml: "20px", width: '40%'}} color='secondary'/>
+                    <TextField onChange={handleQueryChange} variant='outlined' label='Search' sx={{ml: "20px", width: '40%', bgcolor: "white"}} color='secondary'/>
 
                     <IconButton onClick={handleSearchQuery} sx={{ml: "10px",color: 'black', transform: "translate(0%,-10%)" }} aria-label="{Person}" title="Search Users">
                         <Search sx={{fontSize:'32pt'}}/>

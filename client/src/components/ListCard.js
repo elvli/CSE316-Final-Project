@@ -1,15 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Add from '@mui/icons-material/Add';
-import Undo from '@mui/icons-material/Undo';
-import Redo from '@mui/icons-material/Redo';
-import Publish from '@mui/icons-material/Publish';
-import ContentCopy from '@mui/icons-material/ContentCopy';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -20,6 +11,18 @@ import { useHistory } from 'react-router-dom'
 import SongCard from './SongCard.js'
 import Grid from '@mui/material/Grid';
 import * as React from 'react';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Add from '@mui/icons-material/Add';
+import Undo from '@mui/icons-material/Undo';
+import Redo from '@mui/icons-material/Redo';
+import Publish from '@mui/icons-material/Publish';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ThumbUp from '@mui/icons-material/ThumbUp';
+import ThumbDown from '@mui/icons-material/ThumbDown';
 
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
@@ -203,13 +206,27 @@ function ListCard(props) {
                 >
                     <Grid container direction='column'>
                         <Grid item>
-                            <Box onClick={handleToggleEdit} component="div" sx={{ fontSize: "34px", p: 0 }}>{idNamePair.name}</Box>
-                        </Grid>
-                        <Grid item>
-                            <Typography sx={{ fontFamily: "Lexend Exa", fontSize: '18px' }}>
-                                By: {idNamePair.ownerName}
-                            </Typography>
-                            {datePublished}
+                            <Grid container>
+                                <Grid item xs={8}>
+                                    <Box onClick={handleToggleEdit} component="div" sx={{ fontSize: "34px", p: 0 }}>{idNamePair.name}</Box>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <IconButton onClick={handleAddNewSong} disabled={!isPublished} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='like' title="like">
+                                        <ThumbUp style={{ fontSize: '32pt' }} />
+                                    </IconButton>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <IconButton onClick={handleUndo} disabled={!isPublished} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='dislike' title="dislike">
+                                        <ThumbDown style={{ fontSize: '32pt' }} />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                            <Grid item>
+                                <Typography sx={{ fontFamily: "Lexend Exa", fontSize: '18px' }}>
+                                    By: {idNamePair.ownerName}
+                                </Typography>
+                                {datePublished}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Box>
@@ -273,9 +290,9 @@ function ListCard(props) {
                 inputProps={{ style: { fontSize: 48 } }}
                 InputLabelProps={{ style: { fontSize: 24 } }}
                 autoFocus
-                variant='filled'
+                variant='outlined'
                 color='secondary'
-                sx={{ p: 0, transform: "translate(3.5%, 0%)" }}
+                sx={{ p: 0, bgcolor: "white", transform: "translate(3.5%, 0%)" }}
             />
     }
     return (

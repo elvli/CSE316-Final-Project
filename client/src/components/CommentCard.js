@@ -10,7 +10,7 @@ export default function CommentCard(props) {
     let userText = "User: " + user
 
     let commentCard = 
-        <Card sx={{width: "400px", m: "10px", px: "10px", py: "20px", borderRadius: "4px", fontSize: "18pt", }}>
+        <Card wordWrap="break-word" sx={{width: "400px", m: "10px", px: "10px", py: "20px", borderRadius: "4px", fontSize: "18pt", wordWrap: "break-word"}}>
             <Typography>
                 {userText}
             </Typography>

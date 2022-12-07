@@ -21,6 +21,7 @@ export default function MUIDeleteModal() {
             open={store.listMarkedForDeletion !== null}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            hideBackdrop="true"
         >
             <Box sx={{backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)'}}>
                 <DialogTitle id="alert-dialog-title">

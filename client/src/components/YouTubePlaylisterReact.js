@@ -39,8 +39,8 @@ export default function YouTubePlayerExample() {
     let currentSong = store.currentSongIndex;
 
     const playerOptions = {
-        height: '360',
-        width: '585',
+        height: '350',
+        width: '591',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 0,
@@ -58,15 +58,15 @@ export default function YouTubePlayerExample() {
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
         currentSong++;
-        console.log("incindex: " + currentSong);
         currentSong = currentSong % playlist.length;
+        store.setCurrentSong(currentSong, store.currentList.songs[currentSong]);
     }
 
     // THIS FUNCTION DECREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function decSong() {
         currentSong--;
         if (currentSong < 0) {currentSong = playlist.length - 1}
-        console.log("index: " + currentSong);
+        store.setCurrentSong(currentSong, store.currentList.songs[currentSong]);
     }
 
     function onPlayerReady(event) {
@@ -125,7 +125,7 @@ export default function YouTubePlayerExample() {
     }
 
     let infoCard = 
-        <Card elevation={3}>
+        <Card elevation={3} sx={{mt: "10px", backgroundImage: "linear-gradient(to top, #ffffff, #f397ff)"}}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography component="div" variant="h4">

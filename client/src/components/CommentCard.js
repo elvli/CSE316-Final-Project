@@ -1,9 +1,23 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
-import Button from '@mui/material/Button';
+import Card from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-export default function CommentCard() {
+export default function CommentCard(props) {
+    const { user, comment } = props;
     const { store } = useContext(GlobalStoreContext);
 
-    return <div>comment card</div>
+    let userText = "User: " + user
+
+    let commentCard = 
+        <Card sx={{width: "400px", m: "10px", px: "10px", py: "20px", borderRadius: "4px", fontSize: "18pt", }}>
+            <Typography>
+                {userText}
+            </Typography>
+            <Typography>
+                {comment}
+            </Typography>
+        </Card>
+
+    return commentCard;
 }

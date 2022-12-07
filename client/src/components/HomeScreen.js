@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import YouTubePlayerExample from './YouTubePlaylisterReact';
 import CommentsTab from './CommentsTab'
+import CommentCard from './CommentCard'
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Menu from '@mui/material/Menu';
@@ -140,7 +141,6 @@ const HomeScreen = () => {
         handleMenuClose();
     };
 
-
     // THIS SWITCH CASE SORTS THE PLAYLISTS
     let sortedList = 
         store.idNamePairs.map((pair) => (
@@ -244,7 +244,7 @@ const HomeScreen = () => {
 
                 {/* PLAYLIST CARDS */}
                 <Grid item xs={7} sx={{height: '650px', maxHeight: '650px'}}>
-                    <List sx={{width: '100%', backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)', mb:"20px", overflow: 'auto', maxHeight: 687, pt: 0}} >
+                    <List sx={{height: '100%', backgroundImage: 'linear-gradient(to bottom, #f397ff, #ffffff)', mb:"20px", overflow: 'auto', maxHeight: 687, pt: 0}} >
                         {sortedList}
                     </List>
                 </Grid>

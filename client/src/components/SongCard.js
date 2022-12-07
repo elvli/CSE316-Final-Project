@@ -39,15 +39,14 @@ function SongCard(props) {
         store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
+        event.stopPropagation();
         store.showRemoveSongModal(index, song);
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         store.setCurrentSong(index, store.currentList.songs[index]);
-        console.log("songIndex: " + store.currentSongIndex)
-        if (store.currentSong)
-            console.log("songPlaying: " + store.currentSong.title)
-
+        event.stopPropagation();
+        if (event.detail === 2) store.showEditSongModal(index, song);
     }
 
     function handleEdit() {
@@ -78,16 +77,7 @@ function SongCard(props) {
                 {song.title} by {song.artist}
             </a>
             <IconButton
-                sx={{transform:"translate(-300%, -5%)", width:"5px", height:"30px"}}
-                variant="contained"
-                id={"edit-song-" + index}
-                className="list-card-button"
-                onClick={handleEdit}
-                color="secondary">
-                <Edit/>
-            </IconButton>
-            <IconButton
-                sx={{transform:"translate(100%, -5%)", width:"5px", height:"30px"}}
+                sx={{transform:"translate(0%, -5%)", width:"5px", height:"30px"}}
                 variant="contained"
                 id={"remove-song-" + index}
                 className="list-card-button"

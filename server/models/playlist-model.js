@@ -15,11 +15,15 @@ const playlistSchema = new Schema(
             artist: String,
             youTubeId: String
         }], required: true },
-        published: { type: Boolean, required: true },
         comments: { type: [{
             user: String,
             comment: String
         }], required: true},
+        published: { type: Boolean, required: true },
+        publishedDate: {type: Date},
+        likes: {type: Array, required: true},
+        dislikes: {type: Array, required: true},
+        listens: {type: Number, required: true},
     },
     { timestamps: true },
 )

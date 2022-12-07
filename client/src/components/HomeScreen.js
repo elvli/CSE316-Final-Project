@@ -27,7 +27,6 @@ import Home from '@mui/icons-material/Home';
 import Groups from '@mui/icons-material/Groups';
 import Person from '@mui/icons-material/Person';
 import Sort from '@mui/icons-material/Sort';
-import Search from '@mui/icons-material/Search';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -66,12 +65,15 @@ const HomeScreen = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [sortBy, setSortBy] = useState(-1);
     const [query, setQuery] = useState("");
-    const [alignment, setAlignment] = React.useState('left');
+    const [alignment, setAlignment] = React.useState('home');
     const isMenuOpen = Boolean(anchorEl);
       
     let isGuest = false;
     if (auth.user && auth.user.email == "guest@gmail.com") isGuest = true;
 
+    function handleCreateNewList() {
+        store.createNewList();
+    }
     const handleChangeTab = (event, val) => {
         setValue(val)
     };
@@ -85,7 +87,6 @@ const HomeScreen = () => {
         setAnchorEl(null);
     };
 
-
     // THESE ARE THE HANDLERS FOR THE SEARCH BAR
     const handleAlignment = (event, newAlignment) => {
         setAlignment(newAlignment);
@@ -93,27 +94,6 @@ const HomeScreen = () => {
     const handleQueryChange = (event) => {
         setQuery(event.target.value)
     };
-    const handleSearchQuery = () => {
-        // queriedList = queriedList.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase()));
-        store.idNamePairs = store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase()));
-        setSortBy(0);
-        // queriedList.forEach(pair => {
-        //     if (pair.name === query) console.log("banana")
-        // });
-    };
-
-    // const downHandler = (event) => {
-    //     if (event.key === 'Backspace') {
-    //         store.loadIdNamePairs();
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     window.addEventListener("keydown", downHandler);
-    //     return () => {
-    //       window.removeEventListener("keydown", downHandler);
-    //     };
-    //   }, []);
 
     // THESE ARE THE HANDLERS FOR THE SORT MENU
     const handleSortName = () => {
@@ -143,7 +123,7 @@ const HomeScreen = () => {
 
     // THIS SWITCH CASE SORTS THE PLAYLISTS
     let sortedList = 
-        store.idNamePairs.map((pair) => (
+        store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase())).map((pair) => (
             <ListCard
                 key={pair._id}
                 idNamePair={pair}
@@ -165,29 +145,18 @@ const HomeScreen = () => {
                 ));
             break;
         case 1:
-            // let playlists = store.getAllPlaylists();
-
-            // sortedList = 
-            //     playlists.sort((a, b) =>
-            //         a.up
-            //     );
             break;
         default:
             break;
     }
 
-    let text ="";
+    let currentListName = "";
     if (auth.loggedIn && store.currentList){
-        text = store.currentList.name;
+        currentListName = store.currentList.name;
     }
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
-
-    function handleCreateNewList() {
-        store.createNewList();
-    }
-
 
     let listCard = "";
     if (store) {
@@ -197,24 +166,20 @@ const HomeScreen = () => {
 
 
                     {/* HOME BUTTON AND SEARCHBAR */}
-                    <IconButton href='/' disabled={isGuest} onClick={handleHouseClick} sx={{ml: "20px", color: 'black', transform: "translate(0%,-10%)" }} aria-label="home" title="Home">
-                        <Home sx={{fontSize:'32pt'}}/>
-                    </IconButton>
-
-                    <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} sx={{ml: "10px", transform: "translate(0%,5%)" }} aria-label="text alignment">
-                        <ToggleButton value="left" sx={{color: 'black'}} aria-label="Groups" title="Search All Playlist">
+                    <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} sx={{ml: "10px", transform: "translate(6.5%, 5%)" }} aria-label="text alignment">
+                        <ToggleButton value="home" sx={{color: 'black'}} disabled={isGuest} aria-label="home" title="Home">
+                            <Home sx={{fontSize:'20pt'}}/>
+                        </ToggleButton>
+                        <ToggleButton value="allLists" sx={{color: 'black'}} aria-label="Groups" title="Search All Playlist">
                             <Groups sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
-                        <ToggleButton value="right" variant='outlined' sx={{color: 'black'}} title="Search Users" aria-label="right aligned">
+                        <ToggleButton value="allUsers" sx={{color: 'black'}} title="Search Users" aria-label="right aligned">
                             <Person sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
                     </ToggleButtonGroup>
 
-                    <TextField onChange={handleQueryChange} variant='outlined' label='Search' sx={{ml: "20px", width: '40%', bgcolor: "white"}} color='secondary'/>
+                    <TextField onChange={handleQueryChange} variant='outlined' label='Search' sx={{ml: "20px", width: '40%', transform: "translate(2.5%, 0%)", bgcolor: "white"}} color='secondary'/>
 
-                    <IconButton onClick={handleSearchQuery} sx={{ml: "10px",color: 'black', transform: "translate(0%,-10%)" }} aria-label="{Person}" title="Search Users">
-                        <Search sx={{fontSize:'32pt'}}/>
-                    </IconButton>
                 </Grid>
 
                 <Grid item xs={2} bgcolor='#f397ff' sx={{fontSize: 25}}>
@@ -278,7 +243,7 @@ const HomeScreen = () => {
                         </IconButton>
 
                         <Typography sx={{fontSize: '30px', pl: '20px'}}>
-                            {text}
+                            {currentListName}
                         </Typography>
                     </Box>
                 </Grid>

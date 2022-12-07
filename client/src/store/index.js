@@ -420,6 +420,16 @@ function GlobalStoreContextProvider(props) {
                 //         a.up
                 //     );
                 break;
+            case 69:
+                sortedList =
+                    store.idNamePairs.map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ));
+                break;
             default:
                 break;
         }
@@ -461,23 +471,23 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.likeList = function (email, idNamePair, user) {
-        async function asyncGetPlaylist(id){
+        async function asyncGetPlaylist(id) {
             let response = await api.getPlaylistById(id)
-            if (response.data.success){
+            if (response.data.success) {
                 let playlist = response.data.playlist;
-                if (idNamePair.likes.indexOf(user.email) > -1){
+                if (idNamePair.likes.indexOf(user.email) > -1) {
                     playlist.likes.splice(playlist.likes.indexOf(email), 1)
                 }
-                else if(idNamePair.dislikes.indexOf(user.email) > -1){
+                else if (idNamePair.dislikes.indexOf(user.email) > -1) {
                     playlist.dislikes.splice(playlist.dislikes.indexOf(email), 1)
                     playlist.likes.push(email);
                 }
-                else{
+                else {
                     playlist.likes.push(email);
                 }
-                async function updatePlaylist(id ,playlist){
+                async function updatePlaylist(id, playlist) {
                     response = await api.updateUserFeedback(id, playlist);
-                    if (response.data.success){
+                    if (response.data.success) {
                         store.loadIdNamePairs();
                     }
                 }
@@ -487,24 +497,24 @@ function GlobalStoreContextProvider(props) {
         asyncGetPlaylist(idNamePair._id)
     }
 
-    store.dislikeList = function(email, idNamePair, user) {
-        async function asyncGetPlaylist(id){
+    store.dislikeList = function (email, idNamePair, user) {
+        async function asyncGetPlaylist(id) {
             let response = await api.getPlaylistById(id)
-            if (response.data.success){
+            if (response.data.success) {
                 let playlist = response.data.playlist;
-                if (idNamePair.dislikes.indexOf(user.email) > -1){
+                if (idNamePair.dislikes.indexOf(user.email) > -1) {
                     playlist.dislikes.splice(playlist.likes.indexOf(email), 1)
                 }
-                else if(idNamePair.likes.indexOf(user.email) > -1){
+                else if (idNamePair.likes.indexOf(user.email) > -1) {
                     playlist.likes.splice(playlist.dislikes.indexOf(email), 1)
                     playlist.dislikes.push(email);
                 }
-                else{
+                else {
                     playlist.dislikes.push(email);
                 }
-                async function updatePlaylist(id ,playlist){
+                async function updatePlaylist(id, playlist) {
                     response = await api.updateUserFeedback(id, playlist);
-                    if (response.data.success){
+                    if (response.data.success) {
                         store.loadIdNamePairs();
                     }
                 }

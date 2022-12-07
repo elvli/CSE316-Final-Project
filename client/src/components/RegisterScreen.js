@@ -25,7 +25,8 @@ export default function RegisterScreen() {
             formData.get('lastName'),
             formData.get('email'),
             formData.get('password'),
-            formData.get('passwordVerify')
+            formData.get('passwordVerify'),
+            formData.get('username')
         );
     };
 
@@ -55,6 +56,18 @@ export default function RegisterScreen() {
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="username"
+                                    name="username"
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    autoFocus
+                                    color='secondary'
+                                />
+                            </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="fname"

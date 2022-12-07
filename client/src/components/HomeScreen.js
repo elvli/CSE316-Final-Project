@@ -70,6 +70,7 @@ const HomeScreen = () => {
     if (auth.user && auth.user.email == "guest@gmail.com") isGuest = true;
 
     function handleCreateNewList() {
+        console.log("username: " + auth.user.username)
         store.createNewList();
     }
     const handleChangeTab = (event, val) => {

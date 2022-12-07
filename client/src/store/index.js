@@ -317,7 +317,8 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
-        history.push("/");
+        
+        store.loadIdNamePairs();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -447,7 +448,6 @@ function GlobalStoreContextProvider(props) {
     store.publishList = function () {
         store.currentList.published = true;
         store.currentList.publishedDate = new Date();
-
     }
 
     store.canPublishList = function () {
@@ -522,6 +522,27 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncGetPlaylist(idNamePair._id)
+    }
+
+    store.incListens = function (id) {
+        async function asyncSetCurrentList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                if (playlist.published){
+                    playlist.listens++;
+                    console.log("inc: " + playlist.listens);
+                }
+                response = await api.updateUserFeedback(playlist._id, playlist);
+                if (response.data.success) {
+                    storeReducer({
+                        type: GlobalStoreActionType.SET_CURRENT_LIST,
+                        payload: playlist
+                    });
+                }
+            }
+        }
+        asyncSetCurrentList(id);
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
@@ -606,14 +627,13 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-
+                
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
-                    //history.push("/playlist/" + playlist._id);
                 }
             }
         }

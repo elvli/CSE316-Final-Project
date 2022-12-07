@@ -41,31 +41,27 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const [listIndex, setListIndex] = useState(-1);
+    const [expanded, setExpanded] = React.useState(false);
     const { idNamePair, selected } = props;
 
     store.history = useHistory();
 
-    const handleChange = () => (event) => {
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
         if (store.currentList) {
-            if (store.currentList._id == idNamePair._id) store.closeCurrentList()
+            if (idNamePair._id === store.currentList._id) {
+                store.closeCurrentList();
+            }
+            else if (idNamePair._id !== store.currentList._id) {
+                store.closeCurrentList()
+                store.incListens(idNamePair._id);
+            }
         }
-        else handleLoadList(event, idNamePair._id)
+        else {
+            store.incListens(idNamePair._id);
+        }
+
     };
-
-    function handleLoadList(event, id) {
-        console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
-
-            console.log("load " + event.target.id);
-
-            // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
-        }
-    }
 
     function handleToggleEdit(event) {
         event.stopPropagation();
@@ -155,8 +151,19 @@ function ListCard(props) {
         let date = new Date(idNamePair.publishedDate);
 
         datePublished =
-            <Typography sx={{ fontFamily: "Lexend Exa", fontSize: '18px' }}>
-                Published: {date.toLocaleDateString()}
+            <>
+                <Typography sx={{ fontSize: '15px', mt: "10px" }}>
+                    By: {idNamePair.ownerName}
+                </Typography>
+                <Typography sx={{ fontSize: '15px', mt: '10px' }}>
+                    Published: {date.toLocaleDateString()}
+                </Typography>
+            </>
+    }
+    else {
+        datePublished =
+            <Typography sx={{ fontSize: '15px', mt: "10px", transform: "translate( 0%, 70%)" }}>
+                By: {idNamePair.ownerName}
             </Typography>
     }
 
@@ -203,11 +210,11 @@ function ListCard(props) {
         //  SONG CARD ACCORDIAN
         <Accordian
             expanded={open}
-            onChange={handleChange()}
+            onChange={handleChange('panel' + idNamePair._id)}
             elevation={3}
             disableGutters={true}
             sx={{ borderRadius: "4px", margin: "20px", mt: '10px' }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Box
                     id={idNamePair._id}
                     key={idNamePair._id}
@@ -222,27 +229,29 @@ function ListCard(props) {
                             </Grid>
 
                             <Grid item>
-                                <Typography sx={{ fontFamily: "Lexend Exa", fontSize: '18px' }}>
-                                    By: {idNamePair.ownerName}
-                                </Typography>
                                 {datePublished}
                             </Grid>
                         </Grid>
 
                         <Grid item xs={2}>
-                            <IconButton onClick={handleLike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='like' title="like">
-                                <ThumbUp style={{ fontSize: '32pt' }} />
-                                <Typography sx={{ transform: "translate(30%,0%)" }}>
+                            <IconButton onClick={handleLike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%, -90%)" }} color='secondary' aria-label='like' title="like">
+                                <ThumbUp style={{ fontSize: '25pt' }} />
+                                <Typography sx={{ transform: "translate(100%, 0%)" }}>
                                     {idNamePair.likes.length}
                                 </Typography>
                             </IconButton>
 
+                            <Grid item>
+                                <Typography sx={{ fontSize: '15px', mt: "10px", transform: "translate(11%, -20%)" }}>
+                                    Listens: {idNamePair.listens}
+                                </Typography>
+                            </Grid>
                         </Grid>
 
                         <Grid item xs={2}>
-                            <IconButton onClick={handleDislike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%,-60%)" }} color='secondary' aria-label='dislike' title="dislike">
-                                <ThumbDown style={{ fontSize: '32pt' }} />
-                                <Typography sx={{ transform: "translate(30%,0%)" }}>
+                            <IconButton onClick={handleDislike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%, -90%)" }} color='secondary' aria-label='dislike' title="dislike">
+                                <ThumbDown style={{ fontSize: '25pt' }} />
+                                <Typography sx={{ transform: "translate(100%, 0%)" }}>
                                     {idNamePair.dislikes.length}
                                 </Typography>
                             </IconButton>
@@ -255,7 +264,7 @@ function ListCard(props) {
 
             <AccordionDetails>
                 <Grid Container overflow='hidden'>
-                    <Grid item xs={12} overflow='hidden' height='398px' style={{ transform: "translate(0%,-10%)" }}>
+                    <Grid item xs={12} overflow='hidden' height='398px' style={{ transform: "translate(0%, -10%)" }}>
                         {songListJSX}
                     </Grid>
 

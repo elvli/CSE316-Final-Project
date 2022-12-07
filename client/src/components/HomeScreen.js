@@ -4,7 +4,6 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import PlaylistAdd from '@mui/icons-material/PlaylistAdd';
-import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -14,7 +13,6 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import YouTubePlayerExample from './YouTubePlaylisterReact';
 import CommentsTab from './CommentsTab'
-import CommentCard from './CommentCard'
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Menu from '@mui/material/Menu';
@@ -76,9 +74,6 @@ const HomeScreen = () => {
     }
     const handleChangeTab = (event, val) => {
         setValue(val)
-    };
-    const handleHouseClick = () => {
-        store.closeCurrentList();
     };
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -173,7 +168,7 @@ const HomeScreen = () => {
                         <ToggleButton value="allLists" sx={{color: 'black'}} aria-label="Groups" title="Search All Playlist">
                             <Groups sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
-                        <ToggleButton value="allUsers" sx={{color: 'black'}} title="Search Users" aria-label="right aligned">
+                        <ToggleButton value="allUsers" sx={{color: 'black'}} title="Search All Users" aria-label="right aligned">
                             <Person sx={{fontSize:'20pt'}}/>
                         </ToggleButton>
                     </ToggleButtonGroup>
@@ -186,7 +181,7 @@ const HomeScreen = () => {
 
 
                     {/* SORT MENU */}
-                    <IconButton onClick={handleMenuOpen} sx={{color: 'black', transform:"translate(300%,-5%)"}} aria-label="Sort" title="Sort">
+                    <IconButton onClick={handleMenuOpen} sx={{color: 'black', transform:"translate(300%,-5%)"}} aria-label="Sort" title="Sort By">
                         <Sort sx={{fontSize:'32pt'}}/>
                     </IconButton>
                     <Menu

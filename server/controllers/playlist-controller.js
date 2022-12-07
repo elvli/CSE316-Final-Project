@@ -284,6 +284,7 @@ updateUserFeedback = async (req, res) => {
                 playlist.comments = body.playlist.comments;
                 playlist.likes = body.playlist.likes;
                 playlist.dislikes = body.playlist.dislikes;
+                playlist.listens = body.playlist.listens;
                 playlist
                         .save()
                         .then(() => {

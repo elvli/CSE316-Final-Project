@@ -162,7 +162,7 @@ function ListCard(props) {
     }
     else {
         datePublished =
-            <Typography sx={{ fontSize: '15px', mt: "10px", transform: "translate( 0%, 70%)" }}>
+            <Typography sx={{ fontSize: '15px', mt: "10px", transform: "translate( 0%, 14%)" }}>
                 By: {idNamePair.ownerName}
             </Typography>
     }

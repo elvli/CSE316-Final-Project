@@ -11,10 +11,10 @@ export default function CommentCard(props) {
 
     let commentCard = 
         <Card wordWrap="break-word" sx={{width: "400px", m: "10px", px: "10px", py: "20px", borderRadius: "4px", fontSize: "18pt", wordWrap: "break-word"}}>
-            <Typography>
+            <Typography sx={{fontSize: "14px"}}>
                 {userText}
             </Typography>
-            <Typography>
+            <Typography sx={{fontSize: "18px"}}>
                 {comment}
             </Typography>
         </Card>

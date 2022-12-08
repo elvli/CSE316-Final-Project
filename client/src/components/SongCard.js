@@ -8,7 +8,7 @@ import { resolveBreakpointValues } from '@mui/system/breakpoints';
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
-    const [ draggedTo, setDraggedTo ] = useState(0);
+    const [draggedTo, setDraggedTo] = useState(0);
     const { song, index } = props;
 
     function handleDragStart(event) {
@@ -56,6 +56,19 @@ function SongCard(props) {
     let cardClass = "unselected-list-card";
     if (index === store.currentSongIndex) cardClass = "selected-list-card"
 
+    let deleteButton = ""
+    if (store.currentList && !store.currentList.published) {
+        <IconButton
+            sx={{ transform: "translate(0%, -5%)", width: "5px", height: "30px" }}
+            variant="contained"
+            id={"remove-song-" + index}
+            className="list-card-button"
+            onClick={handleRemoveSong}
+            color="secondary">
+            <Close />
+        </IconButton>
+    }
+
     return (
         <div
             key={index}
@@ -76,15 +89,7 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <IconButton
-                sx={{transform:"translate(0%, -5%)", width:"5px", height:"30px"}}
-                variant="contained"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                onClick={handleRemoveSong}
-                color="secondary">
-                <Close/>
-            </IconButton>
+            {removeSongButton}
         </div>
     );
 }

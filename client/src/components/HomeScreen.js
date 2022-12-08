@@ -135,16 +135,23 @@ const HomeScreen = () => {
     };
 
     // THIS SWITCH CASE SORTS THE PLAYLISTS
-    let sortedList = ""
+    let sortedList = store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase())).map((pair) => (
+        <ListCard
+            key={pair._id}
+            idNamePair={pair}
+            selected={false}
+        />
+    ));
 
-    if (store.idNamePairs) {
-        sortedList = store.idNamePairs.filter(pair => pair.name.toUpperCase().includes(query.toUpperCase())).map((pair) => (
+    if (alignment === 2) {
+        sortedList = store.idNamePairs.filter(pair => pair.ownerName.toUpperCase().includes(query.toUpperCase())).map((pair) => (
             <ListCard
                 key={pair._id}
                 idNamePair={pair}
                 selected={false}
             />
         ));
+
     }
 
     let sortMenu = ""

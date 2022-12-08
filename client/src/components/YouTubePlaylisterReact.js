@@ -13,7 +13,6 @@ import Pause from '@mui/icons-material/Pause';
 
 export default function YouTubePlayerExample() {
     const { store } = useContext(GlobalStoreContext);
-    const {allSongs, setAllSongs} = useState(null);
     const playerRef = useRef(null);
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
@@ -43,7 +42,7 @@ export default function YouTubePlayerExample() {
         width: '591',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
-            autoplay: 0,
+            autoplay: 1,
         },
     };
 
@@ -70,7 +69,7 @@ export default function YouTubePlayerExample() {
     }
 
     function onPlayerReady(event) {
-        playerRef.current = event.target
+        playerRef.current = event.target;
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE

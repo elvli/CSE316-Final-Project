@@ -23,7 +23,7 @@ export default function MUISameNameModal() {
             open = {store.isSameNameModalOpen()}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            hideBackdrop={false}
+            hideBackdrop={true}
             PaperProps={{
                 elevation: 0,
                 sx: {border: "solid 1px gray",}

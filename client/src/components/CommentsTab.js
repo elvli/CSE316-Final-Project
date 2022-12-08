@@ -37,6 +37,9 @@ export default function CommentsTab() {
             ))
     }
 
+    let isGuest = false;
+    if (auth.user && auth.user.email == "guest@gmail.com") isGuest = true;
+
     return (
 
         <Grid container>
@@ -51,6 +54,7 @@ export default function CommentsTab() {
                     label="Comment"
                     variant="outlined"
                     color="secondary"
+                    disabled={isGuest}
                     style={{ width: '100%' }}
                     onKeyPress={handleComment}
                 />

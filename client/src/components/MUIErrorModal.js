@@ -24,7 +24,7 @@ export default function MUIErrorModal() {
             open = {auth.errorMessage !== null}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            hideBackdrop={false}
+            hideBackdrop={true}
             PaperProps={{
                 elevation: 0,
                 sx: {border: "solid 1px gray",}

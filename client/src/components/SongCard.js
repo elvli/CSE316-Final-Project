@@ -46,7 +46,7 @@ function SongCard(props) {
         // DOUBLE CLICK IS FOR SONG EDITING
         store.setCurrentSong(index, store.currentList.songs[index]);
         event.stopPropagation();
-        if (event.detail === 2) store.showEditSongModal(index, song);
+        if (event.detail === 2 && !store.currentList.published) store.showEditSongModal(index, song);
     }
 
     function handleEdit() {
@@ -56,8 +56,9 @@ function SongCard(props) {
     let cardClass = "unselected-list-card";
     if (index === store.currentSongIndex) cardClass = "selected-list-card"
 
-    let deleteButton = ""
+    let removeSongButton = ""
     if (store.currentList && !store.currentList.published) {
+        removeSongButton =
         <IconButton
             sx={{ transform: "translate(0%, -5%)", width: "5px", height: "30px" }}
             variant="contained"
@@ -69,6 +70,8 @@ function SongCard(props) {
         </IconButton>
     }
 
+    let isDraggable = !(store.currentList && store.currentList.published);
+
     return (
         <div
             key={index}
@@ -79,7 +82,7 @@ function SongCard(props) {
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            draggable="true"
+            draggable={isDraggable}
             onClick={handleClick}
         >
             {index + 1}.

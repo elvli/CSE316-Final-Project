@@ -112,6 +112,9 @@ function ListCard(props) {
         console.log(open)
     }
 
+    let isGuest = false;
+    if (auth.user && auth.user.email == "guest@gmail.com") isGuest = true;
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -234,7 +237,7 @@ function ListCard(props) {
                         </Grid>
 
                         <Grid item xs={2}>
-                            <IconButton onClick={handleLike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%, -90%)" }} color='secondary' aria-label='like' title="like">
+                            <IconButton onClick={handleLike} disabled={!idNamePair.published || isGuest} sx={{ px: "10px", py: "0px", transform: "translate(0%, -90%)" }} color='secondary' aria-label='like' title="like">
                                 <ThumbUp style={{ fontSize: '25pt' }} />
                                 <Typography sx={{ transform: "translate(100%, 0%)" }}>
                                     {idNamePair.likes.length}
@@ -249,7 +252,7 @@ function ListCard(props) {
                         </Grid>
 
                         <Grid item xs={2}>
-                            <IconButton onClick={handleDislike} disabled={!idNamePair.published} sx={{ px: "10px", py: "0px", transform: "translate(0%, -90%)" }} color='secondary' aria-label='dislike' title="dislike">
+                            <IconButton onClick={handleDislike} disabled={!idNamePair.published || isGuest} sx={{ px: "10px", py: "0px", transform: "translate(0%, -90%)" }} color='secondary' aria-label='dislike' title="dislike">
                                 <ThumbDown style={{ fontSize: '25pt' }} />
                                 <Typography sx={{ transform: "translate(100%, 0%)" }}>
                                     {idNamePair.dislikes.length}
@@ -283,12 +286,12 @@ function ListCard(props) {
 
                         {/* LIST MANIPULATION BUTTONS */}
                         <Box sx={{ float: "right", transform: "translate(180%, 0%)" }}>
-                            <IconButton onClick={handleDuplicate} color='secondary' aria-label='duplicate' title="Duplicate List">
+                            <IconButton onClick={handleDuplicate} disabled = {isGuest} color='secondary' aria-label='duplicate' title="Duplicate List">
                                 <ContentCopy style={{ fontSize: '32pt' }} />
                             </IconButton>
                         </Box>
                         <Box sx={{ float: "right", transform: "translate(180%, 0%)" }}>
-                            <IconButton onClick={(event) => { handleDeleteList(event, idNamePair._id) }} color='secondary' aria-label='delete' title="Delete List">
+                            <IconButton onClick={(event) => { handleDeleteList(event, idNamePair._id) }} disabled = {isGuest || store.currentList && auth.user.email !== store.currentList.ownerEmail} color='secondary' aria-label='delete' title="Delete List">
                                 <DeleteIcon style={{ fontSize: '32pt' }} />
                             </IconButton>
                         </Box>

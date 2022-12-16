@@ -1,3 +1,5 @@
+/* @author Elven Li */
+
 import React, { useContext, useEffect } from 'react';
 import { GlobalStoreContext } from '../store';
 import AuthContext from '../auth'

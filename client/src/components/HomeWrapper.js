@@ -1,3 +1,5 @@
+/* @author Elven Li */
+
 import { useContext } from 'react'
 import HomeScreen from './HomeScreen'
 import SplashScreen from './SplashScreen'

@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
   inject our store into all the components in our application.
   
   @author McKilla Gorilla
+  @author Elven Li
+  
 */
 
 ReactDOM.render(

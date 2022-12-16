@@ -1,3 +1,5 @@
+/* @author Elven Li */
+
 // THESE ARE NODE APIs WE WISH TO USE
 const express = require('express')
 const cors = require('cors')

@@ -8,6 +8,7 @@
     based API which helps a lot with asynchronous communication.
     
     @author McKilla Gorilla
+    @author Elven Li
 */
 
 import axios from 'axios'

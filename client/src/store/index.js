@@ -14,6 +14,7 @@ import AuthContext from '../auth'
     which makes use of things like actions and reducers. 
     
     @author McKilla Gorilla
+    @author Elven Li
 */
 
 // THIS IS THE CONTEXT WE'LL USE TO SHARE OUR STORE

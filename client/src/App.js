@@ -15,6 +15,8 @@ import {
     This is our application's top-level component.
     
     @author McKilla Gorilla
+    @author Elven Li
+    
 */
 /*
   This is the entry-point for our application. Notice that we

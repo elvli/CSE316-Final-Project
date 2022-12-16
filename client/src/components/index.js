@@ -1,3 +1,5 @@
+/* @author Elven Li */
+
 import AppBanner from './AppBanner'
 import EditToolbar from './EditToolbar'
 import HomeScreen from './HomeScreen'

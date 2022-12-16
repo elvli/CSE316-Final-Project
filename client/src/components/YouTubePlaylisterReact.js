@@ -1,3 +1,5 @@
+/* @author Elven Li */
+
 import React, { useContext, useRef, useState} from 'react'
 import YouTube from 'react-youtube';
 import { GlobalStoreContext } from '../store/index.js'

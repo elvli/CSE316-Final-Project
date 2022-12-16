@@ -1,3 +1,4 @@
+/* @author Elven Li */
 const jwt = require("jsonwebtoken")
 
 function authManager() {

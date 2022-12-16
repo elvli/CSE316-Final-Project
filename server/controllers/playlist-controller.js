@@ -7,6 +7,7 @@ const auth = require('../auth')
     functions for each endpoint.
     
     @author McKilla Gorilla
+    @author Elven Li
 */
 createPlaylist = (req, res) => {
     if (auth.verifyUser(req) === null) {

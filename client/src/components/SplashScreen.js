@@ -1,3 +1,5 @@
+/* @author Elven Li */
+
 import playlisterLogo from './images/playlisterLogo.png';
 import Copyright from './Copyright'
 
